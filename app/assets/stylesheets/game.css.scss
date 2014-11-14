@@ -1,3 +1,504 @@
 // Place all the styles related to the game controller here.
 // They will automatically be included in application.css.
 // You can use Sass (SCSS) here: http://sass-lang.com/
+
+/*
+*= require_self
+*/
+
+.player-frames {
+	position: absolute;
+	display: inline;
+	left: 1%;
+	height: 12vw;
+	width: 48%;
+	text-align: center;
+	//border: 1px solid white;
+}
+
+.player-frames div{
+	border-radius: 15px;
+}
+
+.game-chat {
+	position: absolute;
+	text-align: left;
+	left: 1%;
+	top: 13vw;
+	width: 48%;
+	height: 72%;
+	color: black;
+	background-color: grey;
+
+	//border: 1px solid white;
+	border-radius: 15px;
+}
+
+.game-chat h1{
+	text-align: center;
+	color: black;
+	width:100%;
+	height: 10%;
+	margin: 0;
+
+	border-top-left-radius: 15px;
+	border-top-right-radius: 15px;
+}
+
+.game-chat ul{
+	position: relative;
+	font-size: 20px;
+}
+
+.game-chat input{
+	position: absolute;
+	height: inherit;
+	top: 84%;
+	left: 1%;
+	width: 83%;
+	border-radius: 0;
+}
+
+.submit {
+	position: absolute;
+	top: 90.8%;
+	height: 7.5%;
+	left: 85%;
+	width: 14%;
+}
+
+.game-chat input:hover{
+	cursor: text;
+}
+
+.player-1 {
+	position: absolute;
+	top: 3px;
+	left: 3px;
+	height: calc(100% - 7px);
+	width: calc(25% - 7px);
+
+	background-color: white;
+	color: black;
+	border: 1px solid white;
+}
+
+.player-2 {
+	position: absolute;
+	top: 3px;
+	left: calc(25% + 3px);
+	height: calc(100% - 7px);
+	width: calc(25% - 7px);
+
+	background-color: white;
+	color: black;
+	border: 1px solid white;
+}
+
+.player-3 {
+	position: absolute;
+	top: 3px;
+	left: calc(50% + 3px);
+	height: calc(100% - 7px);
+	width: calc(25% - 7px);
+
+	background-color: white;
+	color: black;
+	border: 1px solid white;
+}
+
+.player-4 {
+	position: absolute;
+	top: 3px;
+	left: calc(75% + 3px);
+	height: calc(100% - 7px);
+	width: calc(25% - 7px);
+
+	background-color: white;
+	color: black;
+	border: 1px solid white;
+}
+
+.game-board {
+	position: absolute;
+	background-color: #cde6d0;
+	margin: 0px;
+	top: 2px;
+	left: 100vh;
+
+	z-index: -100;
+	height: 98vh;
+	width: 98vh;
+}
+
+.game-board-middle {
+	position: relative;
+	z-index: -99;
+	border:3px solid #000;
+	height:70%;
+	width: 70%;
+
+	top: 15%;
+	left: 15%;
+}
+
+.game-board-middle img {
+	position: relative;
+	top: 0px;
+	left: 0px;
+	height: 100%;
+	width: 100%
+}
+
+.game-tiles{
+	position: absolute;
+	top: 0;
+	left: 0;
+	height: 100%;
+	width: 100%;
+	border: 1px solid red;
+}
+
+// Title class and colors
+.title-right {
+	position: relative;
+	left: 0px;
+	height: 100%;
+	width: 20%;
+}
+
+.title-bottom {
+	position: relative;
+	top: 0px;
+	left: 0px;
+	width: 100%;
+	height: 20%;
+}
+
+.title-left {
+	position: relative;
+	top: 0px;
+	left: 80%;
+	width: 20%;
+	height: 100%;
+}
+
+.title-top{
+	position: relative;
+	top: 80%;
+	left: 0px;
+	width: 100%;
+	height: 20%;
+}
+
+.brown { background-color: #955436; }
+.teal { 
+	background-color: #aae0fa; 
+	border-bottom: 1px solid black;
+}
+.pink{ background-color: #d93a96; }
+.orange { background-color: #f7941d; }
+.red { background-color: #ed1b24; }
+.yellow { background-color: #fef200; }
+.green{ background-color: #1fb25a; }
+.blue { background-color: #0072bb; }
+
+
+//Top, Left, Bottom, Right and Corner board tile styling
+.top-tile {
+	position: absolute;
+	top: -3px;
+	height: 15%;
+	width: 7.777777777%;
+
+	border-right: 3px solid black;
+	border-top: 3px solid black;
+}
+
+.top-tile img {
+	position: relative;
+	top: 0;
+	left: 0;
+	height: 100%;
+	width: 100%;
+}
+
+.left-tile {
+	position: absolute;
+	left: 0px;
+	height: 7.77777777%;
+	width: 15%;
+	border-top: 3px solid #000;
+}
+
+.left-tile img {
+	position: relative;
+	top: 0;
+	left: 0;
+	width: 100%;
+	height: calc(100% - 3px);
+}
+
+.bottom-tile {
+	position: absolute;
+	top: calc(85% + 3px);
+	height: 15%;	
+	width: calc(7.777777777% - 3px);
+	border: 3px solid #000;
+}
+
+.bottom-tile img{
+	position: relative;
+	top: 0px;
+	left: 0px;
+	height: calc(100% - 6px);
+	width: 100%;
+}
+
+.right-tile {
+	position: absolute;
+	left: calc(85% + 3px);
+	height: 7.77777777777%;
+	width: 15%;
+	border-bottom: 3px solid black;
+	border-left: 3px solid black;
+}
+
+.right-tile img{
+	position: relative;
+	top: 0;
+	left: 0;
+	height: 100%;
+	width: calc(100% - 6px);
+}
+
+.corner-tile {
+	position: absolute;
+	border: 3px solid #000;
+	height: 15%;
+	width: 15%;
+}
+
+.corner-tile img{
+	position: relative;
+	height: calc(100% - 6px);
+	width: calc(100% - 6px);
+}
+
+//Corner tile styling
+.free-parking {
+	top: -3px;
+	left: -3px;
+}
+
+.go-to-jail {
+	top: -3px;
+	left: calc(85% + 3px);
+}
+
+.jail{
+	top: calc(85% + 3px);
+	left: -3px;
+}
+
+.in-jail {
+	position: relative;
+	left: 30%;
+	top: 0px;
+	width: 70%;
+	height: calc(70% - 3px);
+	border-left: 3px solid black;
+	border-bottom: 3px solid black;
+}
+
+.in-jail img{
+	position: relative;
+	height: 100%;
+	width: 100%;
+}
+
+.go {
+	top: calc(85% + 3px);
+	left: calc(85% + 3px);
+}
+
+//Bottom tile styling
+.mediteranean-avenue {
+	left: calc(85% - 7.777777777%);
+
+	border-right: none;
+	width: 7.77777777%;
+}
+
+.community-chest-bottom {
+	left: calc(85% - 2*7.777777777%);
+}
+
+.baltic-avenue{
+	left: calc(85% - 3*7.777777777%);
+}
+
+.income-tax-bottom {
+	left: calc(85% - 4*7.777777777%);
+}
+
+.reading-railroad {
+	left: calc(85% - 5*7.777777777%);
+}
+
+.oriental-avenue {
+	left: calc(85% - 6*7.777777777%);
+}
+
+.chance-bottom {
+	left: calc(85% - 7*7.777777777%);
+}
+
+.vermont-avenue {
+	left: calc(85% - 8*7.777777777%);
+}
+
+.connecticut-avenue {
+	left: calc(85% - 9*7.777777777%);
+}
+
+//Left tile styling
+.st-charles-place {
+	top: calc(85% - 7.7777777%);
+}
+
+.electric-company {
+	top: calc(85% - 2*7.7777777%);
+}
+
+.states-avenue {
+	top: calc(85% - 3*7.7777777%);
+	z-index: -100;
+}
+
+.virginia-avenue {
+	top: calc(85% - 4*7.7777777%);
+	z-index: -200;
+}
+
+.pennsylvania-railroad {
+	top: calc(85% - 5*7.7777777%);
+	z-index: -300;
+}
+
+.st-james-place {
+	top: calc(85% - 6*7.7777777%);
+	z-index: -400;
+}
+
+.community-chest-left {
+	top: calc(85% - 7*7.7777777%);
+	z-index: -500;
+}
+
+.tennessee-avenue {
+	top: calc(85% - 8*7.7777777%);
+	z-index: -600;
+}
+
+.new-york-avenue {
+	top: calc(85% - 9*7.7777777%);
+	z-index: -700;
+}
+
+//Top tile styling
+.kentucky-avenue {
+	left: calc(15%);
+	z-index: -100;
+}
+
+.chance-top {
+	left: calc(15% + 7.7777777%);
+	z-index: -200;
+}
+
+.indiana-avenue {
+	left: calc(15% + 2*7.7777777%);
+	z-index: -300;
+}
+
+.illinois-avenue {
+	left: calc(15% + 3*7.7777777%);
+	z-index: -400;
+}
+
+.b-n-o-railroad {
+	left: calc(15% + 4*7.7777777%);
+	z-index: -500;
+}
+
+.atlantic-avenue {
+	left: calc(15% + 5*7.7777777%);
+	z-index: -600;
+}
+
+.ventnor-avenue {
+	left: calc(15% + 6*7.7777777%);
+	z-index: -700;
+}
+
+.water-works {
+	left: calc(15% + 7*7.7777777%);
+	z-index: -800;
+}
+
+.marvin-gardens {
+	left: calc(15% + 8*7.7777777%);
+	z-index: -900;
+	width: calc(7.777777777% + 3px);
+	border-right: none;
+}
+
+//Right tile styling
+.pacific-avenue {
+	top: 15%;
+	z-index: -100;
+}
+
+.north-carolina-avenue {
+	top: calc(15% + 7.777777777%);
+	z-index: -200;
+}
+
+.community-chest-right {
+	top: calc(15% + 2*7.777777777%);
+	z-index: -300;
+}
+
+.pennsylvania-avenue {
+	top: calc(15% + 3*7.777777777%);
+	z-index: -400;
+}
+
+.short-line {
+	top: calc(15% + 4*7.777777777%);
+	z-index: -500;
+}
+
+.chance-right {
+	top: calc(15% + 5*7.777777777%);
+	z-index: -600;
+}
+
+.park-place {
+	top: calc(15% + 6*7.777777777%);
+	z-index: -700;
+}
+
+.luxury-tax {
+	top: calc(15% + 7*7.777777777%);
+	z-index: -800;
+}
+
+.boardwalk {
+	top: calc(15% + 8*7.777777777%);
+	z-index: -900;
+
+	border-bottom: none;
+	height: calc(7.77777777% + 3px);
+}

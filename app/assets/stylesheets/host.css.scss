@@ -1,8 +1,26 @@
-// Place all the styles related to the host controller here.
-// They will automatically be included in application.css.
-// You can use Sass (SCSS) here: http://sass-lang.com/
-
+/* line 5, /home/jake/667_workspace/monopoly/app/assets/stylesheets/host.css.scss */
 .content {
+  position: absolute;
+  top: 10%;
+}
+
+.line {
+  width: 100%;
+  margin: 10px;
+  background-color: #fff;
+  height: 1px;
+  width: 100%;
+}
+
+.add-player{
+	
+}
+
+.start-button {
 	position: absolute;
-	top: 10%;
+	height:40%;
+	width:30%;
+
+	top: 80%;
+	left: 65%;
 }
