@@ -22,10 +22,13 @@ gem 'jbuilder', '2.2.4'
 # bundle exec rake doc:rails generates the API under doc/api.
 gem 'sdoc', '~> 0.4.0',          group: :doc
 
+group :production do
+   gem 'pg'
+end
 group :development, :test do
    gem 'debugger'
    gem 'rspec-rails', '3.1.0' 
-   gem 'spring'
+   gem 'spring', '1.1.3'
    gem 'sqlite3'
 end
 
