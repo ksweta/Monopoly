@@ -48,13 +48,41 @@ body {
 	background-color: #fff;
 }
 
-.banner h1{
-	text-align: left;
-	left: 10px;
+.title-header {
+	position: absolute;
+	text-align: center;
+	left: 35%;
 	width: 30%;
-	display: inline-block;
+	font-size: 50px;
 }
 
 .navbar-link {
 	display: inline;
+}
+
+.login {
+	position: absolute;
+	width: 500px;
+	left: calc(100% - 500px);
+}
+
+.login-text {
+	position: absolute;
+	text-align: right;
+	left: 0;
+	width: 70%;
+}
+
+.logout-button {
+	position: absolute;
+	left: 70%;
+	width: 30%;
+}
+
+.logout-button input{
+	width: 80%;
+	color: white;
+	background-color: blue;
+	border: none;
+	border-radius: 5px;
 }

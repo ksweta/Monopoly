@@ -60,9 +60,47 @@ input:hover{
 	border: 1px solid #fff;
 }
 
-h2 {
+.chat-messages {
+	position: absolute;
+	background-color: grey;
+	height: 70%;
+	width: 100%;
+	top: 15%;
+	left: 0;
+}
+
+.chat-input-box {
+	position: absolute;
+	background-color: white;
+	height: 15%;
+	top: 85%;
+	width: 100%;
+}
+
+.chat-text-input {
+	position: absolute;
+	height: 100%;
+	width: calc(80% - 10px);
+	top: 0;
+	left: 10px;
+	margin: 0;
+	padding: 0;
+	border: none;
+}
+
+.chat-submit-button {
+	position: absolute;
+	top: 0;
+	left: 80%;
+	width: 20%;
+	height: 100%;
+	border: none;
+}
+
+.chat-header {
 	margin: 0;
 	position: relative;
+	height: 15%;
 	width: 100%;
 	top: 0;
 	left: 0%;
@@ -70,4 +108,15 @@ h2 {
 
 	background-color: #fff;
 	color: #000;
+}
+
+.chat-header h2{
+	margin: 0;
+}
+
+#flash_notice {
+  text-align: right;
+  position: absolute;
+  top: 20px;
+  left: 90px;
 }
