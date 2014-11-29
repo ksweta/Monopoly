@@ -10,5 +10,4 @@ class WelcomeController < ApplicationController
 	def index
 		Pusher.trigger('public-chat', 'new-message', {:message => 'hello world'})
 	end
-
 end

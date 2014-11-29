@@ -7,7 +7,7 @@ Rails.application.routes.draw do
   get 'host_game/host'
   get 'welcome/index'
 
-  post 'welcome/submit', to: 'welcome#submit'
+  post 'welcome/index', to: 'welcome#index'
 
   post 'pusher/auth'
 
