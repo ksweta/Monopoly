@@ -1,13 +1,33 @@
+<%
+p1_money = 2000
+p2_money = 2000
+p3_money = 2000
+p4_money = 2000
+
+p1_position = 0
+%>
+
 <div class="player-frames">
-	<div class="player-1">Player 1</div>
-	<div class="player-2 yellow">Player 2</div>
-	<div class="player-3">Player 3</div>
-	<div class="player-4">Player 4</div>
+	<div class="player-1 teal">
+		<p>Player 1</p>
+		<p>Money: <%= p1_money %></p>
+	</div>
+	<div class="player-2">
+		<p>Player 2</p>
+		<p>Money: <%= p2_money %></p>
+	</div>
+	<div class="player-3">
+		<p>Player 3</p>
+		<p>Money: <%= p3_money %></p>
+	</div>
+	<div class="player-4">
+		<p>Player 4</p>
+		<p>Money: <%= p4_money %></p>
+	</div>
 </div>
 
 <div class="game-chat">
 	<h1 class="blue">Game Chat:</h1>
-	<br>
 	<br>
 	<br>
 	<br>
@@ -26,6 +46,10 @@
 		<button class="submit">Submit</button>
 	</form>
 </div>
+
+<%= button_to "Roll Dice", {}, {:class => "action-button roll green"} %>
+<%= button_to "Buy Houses", {}, {:class => "action-button buy green"} %>
+
 
 <div class="game-board">
 

@@ -13,7 +13,7 @@
 	color: red;
 }
 
-.start-game-buttons button, input{
+.start-game-buttons #find-game, #host-game {
 	font-size: 30px;
 	height:20%;
 	width: 90%;
@@ -65,7 +65,7 @@ h2 {
 	position: relative;
 	width: 100%;
 	top: 0;
-	left: 0;
+	left: 0%;
 	text-align: center;
 
 	background-color: #fff;

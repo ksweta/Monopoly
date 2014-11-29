@@ -1,13 +1,24 @@
 <div class="banner">	
-	<h1> Monopoly </h1>
-</div>
+	<p class="navbar-text pull-right">
+		<% if user_signed_in? %>
+		Logged in as <strong><%= current_user.email %></strong>.
+		<%= button_to "Logout", destroy_user_session_path, method: :delete, :class => 'navbar-link'  %>
+		<% else %>
+		<%= link_to "Sign up", new_user_registration_path, :class => 'navbar-link'  %> |
+		<%= link_to "Login", new_user_session_path, :class => 'navbar-link'  %>
+		<% end %>
 
-<div class="start-game-buttons">
-	<button id="find-game" type="button">Find Game!</button>
-	
-	<form action="/host_game/host.html">
-		<input id="host-game" 	type="submit" value="Host Game">
-	</form>
+		<% flash.each do |name, msg| %>
+		<%= content_tag :div, msg, :id => "flash_#{name}" %>
+		<% end %>
+	</div>
+
+	<div class="start-game-buttons">
+		<button id="find-game" type="button">Find Game!</button>
+
+		<form action="/host_game/host.html">
+			<input id="host-game" 	type="submit" value="Host Game">
+		</form>
 
 	<!--<%= button_to "Find Game!", {class: "yo"} %>
 	<%= button_to "Host Game" %>-->
