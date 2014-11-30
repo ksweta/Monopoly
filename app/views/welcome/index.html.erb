@@ -31,8 +31,8 @@
 		</div>
 
 		<div class="chat-input-box">
-				<input class="chat-text-input" value="type chat here">
-				<%= button_to "Submit", {action: "index", controller: "welcome"}, class: "chat-submit-button" %>
+				<input id="chat-text-input" value="Enter chat here." name="chat-text">
+				<button class="chat-submit-button" onclick="submit()">Submit</button>
 		</div>
 	</div>
 </div>

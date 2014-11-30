@@ -8,6 +8,9 @@ class WelcomeController < ApplicationController
 	before_filter :authenticate_user!
 
 	def index
-		Pusher.trigger('public-chat', 'new-message', {:message => 'hello world'})
+	end
+
+	def submit
+		Pusher.trigger('public-chat', 'new-message', {:uid => current_user.email,:message => params[:message]})
 	end
 end

@@ -4,34 +4,12 @@
 	<title>Monopoly</title>
 	<%= stylesheet_link_tag 'application', media: 'all', 'data-turbolinks-track' => true %>
 	<%= stylesheet_link_tag params[:controller] %>
+	<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.4.2/jquery.min.js"></script>
 	<%= javascript_include_tag params[:controller] %>
 	<%= javascript_include_tag 'application', 'data-turbolinks-track' => true %>
-	<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.4.2/jquery.min.js"></script>
 	<script src="http://js.pusher.com/2.0/pusher.min.js"></script>
 
 	<script type="text/javascript" charset="utf-8">
-		$(function() {
-        var pusher = new Pusher('4eff344ae11ed3c814c8'); // Replace with your app key
-        var channel = pusher.subscribe('public-chat');
-
-        // Some useful debug msgs
-        pusher.connection.bind('connecting', function() {
-        	$('.chat-messages').html('Connecting to Pusher...');
-        });
-        pusher.connection.bind('connected', function() {
-        	$('.chat-messages').html('Connected to Pusher!');
-        });
-        pusher.connection.bind('failed', function() {
-        	$('.chat-messages').text('Connection to Pusher failed :(');
-        });
-        channel.bind('subscription_error', function(status) {
-        	$('.chat-messages').text('Pusher subscription_error');
-        });
-       });
-
-		channel.bind('new-message', function(data) {
-			alert('An event was triggered with message: ' + data.message);
-		});
 	</script>
 	<%= csrf_meta_tags %>
 </head>
