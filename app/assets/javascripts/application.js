@@ -20,21 +20,26 @@ $(function() {
 
         // Some useful debug msgs
         pusher.connection.bind('connecting', function() {
-        	$('.chat-messages').html('Connecting to Pusher...');
+        	$('#chat-messages').html('Connecting to Pusher...');
         });
         pusher.connection.bind('connected', function() {
-        	$('.chat-messages').html('Connected to Pusher!');
+        	$('#chat-messages').html('Connected to Pusher!');
         });
         pusher.connection.bind('failed', function() {
-        	$('.chat-messages').text('Connection to Pusher failed :(');
+        	$('#chat-messages').text('Connection to Pusher failed :(');
         });
         channel.bind('subscription_error', function(status) {
-        	$('.chat-messages').text('Pusher subscription_error');
+        	$('#chat-messages').text('Pusher subscription_error');
         });
 
         channel.bind('new-message', function(data) {
-        	$('.chat-messages').html('<strong>' + data.uid + '</strong>: ' + data.message);
-        });
+        	/*var node = document.createElement("p");
+									node.innerHTML = "<strong>" + data.uid + "</strong>: " + data.message;
+									document.getElementById("chat-messages").appendChild(node);
+									$messages = $('#chat-messages');*/
+    					$("#chat-messages").append('<p class="row"><strong>' + data.uid + ":</strong>" + data.message + '</p>');
+    					$("#chat-messages").animate({ scrollTop: $("#chat-messages")[0].scrollHeight }, "slow");
+								});
        });
 
 function submit() {

@@ -14,9 +14,9 @@
 }
 
 .start-game-buttons #find-game, #host-game {
-	font-size: 30px;
+	font-size: 20px;
 	height:20%;
-	width: 90%;
+	width: 45%;
 	left: 5%;
 	margin-top: 5%;
 
@@ -54,20 +54,26 @@ input:hover{
 .chat-box {
 	position: relative;
 	width: 90%;
-	height: 40%;
+	height: 65%;
 	top: 5%;
 	left: 5%;
 	border: 1px solid #fff;
 }
 
-.chat-messages {
+#chat-messages {
 	position: absolute;
-	background-color: grey;
+	background-color: #260339;
 	height: 70%;
 	width: calc(100% - 5px);
 	top: 15%;
 	left: 0px;
 	padding-left: 5px;
+	overflow: auto;
+}
+
+#chat-messages p{
+	padding: 1px;
+	margin: 1px;
 }
 
 .chat-input-box {
