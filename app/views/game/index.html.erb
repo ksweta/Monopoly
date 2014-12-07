@@ -26,12 +26,14 @@
 	
 	<% @games.each do |game| %>
 		<p>ID: <%= game.id %> 
-			Players: <%= 
+			Host: <%= 
 				if game.players[0] then
-					game.players[0].user_id
+					game.players[0].email
 				end %>
-			<%= link_to 'Destroy', game, method: :delete, data: { confirm: 'Are you sure?' } %> 
-			<%= link_to 'Show', game %>
+			<form action="game/join">
+			<input type="hidden" value="<%= game.id %>" name="id">
+		<input type="submit" value="Join">
+	</form>
 		</p>
 	<% end %>
 	
