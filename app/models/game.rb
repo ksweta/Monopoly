@@ -8,5 +8,6 @@ class Game < ActiveRecord::Base
    #Validation
    validates :status, presence: true
    validates :turn,  numericality: { only_integer: true }
+   # validates :players, numericality: {only_integer: true}, presence: true
 
 end

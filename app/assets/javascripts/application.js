@@ -44,6 +44,7 @@ $(function() {
 
 function submit() {
 	var message = document.getElementById('chat-text-input').value;
+    $('#chat-text-input').innerHTML = "";
 	//alert(message);
 	$.ajax({
 		type: "POST",

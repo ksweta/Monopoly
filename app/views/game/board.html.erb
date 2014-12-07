@@ -1,2 +1,110 @@
-<h1>Game#board</h1>
-<p>Find me in app/views/game/board.html.erb</p>
+<%
+p1_money = 2000
+p2_money = 2000
+p3_money = 2000
+p4_money = 2000
+
+p1_position = 0
+%>
+
+<div class="player-frames">
+	<div class="player-1 teal">
+		<p>Player 1</p>
+		<p>Money: <%= p1_money %></p>
+	</div>
+	<div class="player-2">
+		<p>Player 2</p>
+		<p>Money: <%= p2_money %></p>
+	</div>
+	<div class="player-3">
+		<p>Player 3</p>
+		<p>Money: <%= p3_money %></p>
+	</div>
+	<div class="player-4">
+		<p>Player 4</p>
+		<p>Money: <%= p4_money %></p>
+	</div>
+</div>
+
+<div class="game-chat">
+	<h1 class="blue">Game Chat:</h1>
+	<br>
+	<br>
+	<br>
+	<br>
+	<br>
+	<br>
+	<ul>
+		<li><strong>Player 2:</strong> Ennui selfies hoodie, direct trade deep v you probably haven't heard of them biodiesel church-key XOXO tote bag kogi next level. Dreamcatcher hoodie Austin, organic tilde pug fixie cold-pressed trust fund ethical freegan. Banksy stumptown fap, church-key umami</li>
+		<li><strong>Player 4:</strong> Actually swag Tonx, fannel. Actually flexitarian quinoa forage Echo Park, </li>
+		<li><strong>Player 1:</strong> Schlitz direct trade swag selvage, vegan distillery seitan +1 readymade chillwave put a bird on it</li>
+		<li><strong>Player 1:</strong> DIY, Four loko PBR roof party keytar viral</li>
+	</ul>
+
+	<form>
+		<input type="text">
+		<button class="submit">Submit</button>
+	</form>
+</div>
+
+<%= button_to "Roll Dice", {}, {:class => "action-button roll green"} %>
+<%= button_to "Buy Houses", {}, {:class => "action-button buy green"} %>
+
+
+<div class="game-board">
+
+	<div class="game-board-middle"><%= image_tag "board-middle.jpg" %></div>
+
+	<div class="board-tiles">
+		
+		<!-- Corner board tiles for the entire game-->
+		<div class="corner-tile free-parking"><%= image_tag "free_parking.jpg" %></div>
+		<div class="corner-tile go-to-jail"><%= image_tag "jail.jpg" %></div>
+		<div class="corner-tile go"><%= image_tag "go.jpg" %></div>
+		<div class="corner-tile jail"><div class="in-jail orange"><%= image_tag "in_jail.jpg" %></div></div>
+
+		<!-- Bottom board tiles-->
+		<div class="bottom-tile mediteranean-avenue"><div class="title-bottom brown"></div></div>
+		<div class="bottom-tile community-chest-bottom"><%= image_tag "community-chest-bottom.jpg" %></div>
+		<div class="bottom-tile baltic-avenue"><div class="title-bottom brown"></div></div>
+		<div class="bottom-tile income-tax-bottom"><%= image_tag "income-tax.jpg" %></div>
+		<div class="bottom-tile reading-railroad"><%= image_tag "reading-railroad.jpg" %></div>
+		<div class="bottom-tile oriental-avenue"><div class="title-bottom teal"></div></div>
+		<div class="bottom-tile chance-bottom"><%= image_tag "chance-bottom.jpg" %></div>
+		<div class="bottom-tile vermont-avenue"><div class="title-bottom teal"></div></div>
+		<div class="bottom-tile connecticut-avenue"><div class="title-bottom teal"></div></div>
+
+		<!-- Left board tiles-->
+		<div class="left-tile st-charles-place"><div class="title-left pink"></div></div>
+		<div class="left-tile electric-company"><%= image_tag "electric-company.jpg" %></div>
+		<div class="left-tile states-avenue"><div class="title-left pink"></div></div>
+		<div class="left-tile virginia-avenue"><div class="title-left pink"></div></div>
+		<div class="left-tile pennsylvania-railroad"><%= image_tag "pennsylvania-railroad.jpg" %></div>
+		<div class="left-tile st-james-place"><div class="title-left orange"></div></div>
+		<div class="left-tile community-chest-left"><%= image_tag "community-chest-left.jpg" %></div>
+		<div class="left-tile tennessee-avenue"><div class="title-left orange"></div></div>
+		<div class="left-tile new-york-avenue"><div class="title-left orange"></div></div>
+
+		<!-- Top board tiles-->
+		<div class="top-tile kentucky-avenue"><div class="title-top red"></div></div>
+		<div class="top-tile chance-top"><%= image_tag "chance-top.jpg" %></div>
+		<div class="top-tile indiana-avenue"><div class="title-top red"></div></div>
+		<div class="top-tile illinois-avenue"><div class="title-top red"></div></div>
+		<div class="top-tile b-n-o-railroad"><%= image_tag "b-n-o-railroad.jpg" %></div>
+		<div class="top-tile atlantic-avenue"><div class="title-top yellow"></div></div>
+		<div class="top-tile ventnor-avenue"><div class="title-top yellow"></div></div>
+		<div class="top-tile water-works"><%= image_tag "water-works.jpg" %></div>
+		<div class="top-tile marvin-gardens"><div class="title-top yellow"></div></div>
+
+		<!-- Right board tiles -->
+		<div class="right-tile pacific-avenue"><div class="title-right green"></div></div>
+		<div class="right-tile north-carolina-avenue"><div class="title-right green"></div></div>
+		<div class="right-tile community-chest-right"><%= image_tag "community-chest-right.jpg" %></div>
+		<div class="right-tile pennsylvania-avenue"><div class="title-right green"></div></div>
+		<div class="right-tile short-line"><%= image_tag "short-line.jpg" %></div>
+		<div class="right-tile chance-right"><%= image_tag "chance-right.jpg" %></div>
+		<div class="right-tile park-place"><div class="title-right blue"></div></div>
+		<div class="right-tile luxury-tax"><%= image_tag "luxury-tax.jpg" %></div>
+		<div class="right-tile boardwalk"><div class="title-right blue"></div></div>
+	</div>
+</div>

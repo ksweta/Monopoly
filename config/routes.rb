@@ -1,5 +1,6 @@
 Rails.application.routes.draw do
   devise_for :users
+  resources :game
 
   get 'game/index'
   get 'game/board'
@@ -7,7 +8,6 @@ Rails.application.routes.draw do
   get 'welcome/index'
 
   post 'welcome/submit'
-
   post 'pusher/auth'
 
   # The priority is based upon order of creation: first created -> highest priority.
@@ -23,6 +23,10 @@ Rails.application.routes.draw do
 
   get '/welcome' => 'welcome#index'
   get '/game/' => 'game#index'
+  get '/game/list' => 'game#index'
+  get 'game/game/destroy' => 'game#destroy'
+  post '/game/create' => 'game#create'
+
 
   # Example of named route that can be invoked with purchase_url(id: product.id)
   #   get 'products/:id/purchase' => 'catalog#purchase', as: :purchase
