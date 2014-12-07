@@ -26,6 +26,7 @@ Rails.application.routes.draw do
   get '/game/list' => 'game#index'
   get 'game/game/destroy' => 'game#destroy'
   post '/game/create' => 'game#create'
+  get '/game/game/new' => 'game#create'
 
 
   # Example of named route that can be invoked with purchase_url(id: product.id)

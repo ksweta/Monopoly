@@ -25,10 +25,17 @@
 	<% end %>
 	
 	<% @games.each do |game| %>
-		<p>ID: <%= game.id %> Players: <% game.players %> <%= link_to 'Destroy', game, method: :delete, data: { confirm: 'Are you sure?' } %></p>
+		<p>ID: <%= game.id %> 
+			Players: <%= 
+				if game.players[0] then
+					game.players[0].user_id
+				end %>
+			<%= link_to 'Destroy', game, method: :delete, data: { confirm: 'Are you sure?' } %> 
+			<%= link_to 'Show', game %>
+		</p>
 	<% end %>
 	
-	<form action="new">
+	<form action="game/new">
 		<input type="submit" value="Create Game">
 	</form>
 </div>
