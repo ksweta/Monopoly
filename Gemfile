@@ -1,5 +1,5 @@
 source 'https://rubygems.org'
-ruby '2.0.0'
+ruby '1.9.3'
 #ruby-gemset=monopoly_project_rails_4_1
 gem 'devise', '3.4.1'
 # Bundle edge Rails instead: gem 'rails', github: 'rails/rails'
