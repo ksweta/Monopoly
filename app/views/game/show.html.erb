@@ -1,4 +1,14 @@
+<script type="text/javascript">
+	var pusher = new Pusher('4eff344ae11ed3c814c8');
+	var channel = pusher.subscribe('game-<%= @game.id %>');
+	channel.bind('new-player', function(data) {
+		//alert("loading <%= @game.id %> .player-"+data.player);
+		$(".player-wrapper").load("<%= @game.id %> .player-frames");
+	});
+	//alert('subscribed to game-<%= @game.id%>'); 
+</script>
 
+<div class="player-wrapper">
 <div class="player-frames">
 	<div class="player-1 teal">
 		<p>Player 1: <%= @game.players[0].email %></p>
@@ -25,6 +35,7 @@
 		<p>Money: <%= @game.players[3].balance %></p>
 	</div>
 	<% end %>
+</div>
 </div>
 
 <div class="game-chat">

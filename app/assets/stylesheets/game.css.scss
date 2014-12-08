@@ -6,6 +6,16 @@
 *= require_self
 */
 
+form, p {
+	display: inline;
+}
+
+td {
+	text-align: center;
+	border: 1px solid white;
+	width: 200px;
+}
+
 .action-button {
 	position: absolute;
 	top: 13vw;

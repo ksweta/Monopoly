@@ -14,17 +14,22 @@
 			@game = Game.find(params[:id])
 			player_exists = false
 
-			if @game.players.size < 4
+			p "Size of players: " + @game.players.length.to_s
+			if @game.players.length < 4
 				@game.players.each do |player|
+					p "User ID: " + player.user_id.to_s
+					p "Joining ID: " + current_user.id.to_s
 					if player.user_id == current_user.id
 						player_exists = true
 					end
 				end
 			end
 
-			if !player_exists
+			unless player_exists
 				@game.players.create!(user: current_user, position: 0, balance: 1999.00, email: current_user.email)
 			end
+			p "Channel: game-"+params[:id].to_s
+			Pusher.trigger('game-'+params[:id].to_s, 'new-player', {:player => @game.players.length})
 			redirect_to :action => "show", id: params[:id] 
 		end
 

@@ -23,20 +23,29 @@
 	<% if @games.empty? then %> 
 	<p> No games currently being started.</p>
 	<% end %>
-	
+
+	<div class="games-list">
+	<table>
+	<tr>
+    <th>Game ID</th>
+    <th>Host</th> 
+    <th>Players</th>
+  </tr>
+
 	<% @games.each do |game| %>
-		<p>ID: <%= game.id %> 
-			Host: <%= 
-				if game.players[0] then
-					game.players[0].email
-				end %>
-			<form action="game/join">
+			<tr>
+				<td><%= game.id %></td> 
+				<td><%= game.players[0].email %> </td>
+				<td><%= game.players.length %></td>
+				<td><form action="game/join">
 			<input type="hidden" value="<%= game.id %>" name="id">
-		<input type="submit" value="Join">
+		<input type="submit" value="Join"></td>
 	</form>
-		</p>
+	</tr>
 	<% end %>
-	
+	</table>
+	</div>
+
 	<form action="game/new">
 		<input type="submit" value="Create Game">
 	</form>
