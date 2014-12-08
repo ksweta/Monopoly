@@ -1,0 +1,15 @@
+<%= form_for :game, url: "create" do |g| %>
+  <p>
+    <%= g.label "Private: " %>
+    <%= g.check_box :private? %>
+  </p>
+ 
+  <p>
+    <%= g.label "Number of Players:" %>
+    <%= g.text_field :players %>
+  </p>
+ 
+  <p>
+    <%= g.submit %>
+  </p>
+<% end %>
