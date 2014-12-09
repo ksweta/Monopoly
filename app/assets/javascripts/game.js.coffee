@@ -2,11 +2,6 @@
 # All this logic will automatically be available in application.js.
 # You can use CoffeeScript in this file: http://coffeescript.org/
 
-jQuery ->
-	$(document).ready(
-	
-	);
-
 	window.chat_submit = ->
 		message = $("#text").val()
 		id = $("#game-id").val()
@@ -16,3 +11,10 @@ jQuery ->
    url: "chat_message"
    data: {message: message, id: id}
 	
+	window.start_game = ->
+		id = $("#game-id").val()
+		alert "yo"
+		$.ajax
+   type: "POST"
+   url: "start_button"
+   data: {id: id}

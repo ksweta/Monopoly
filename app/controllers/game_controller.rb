@@ -14,11 +14,8 @@
 			@game = Game.find(params[:id])
 			player_exists = false
 
-			p "Size of players: " + @game.players.length.to_s
 			if @game.players.length < 4
 				@game.players.each do |player|
-					p "User ID: " + player.user_id.to_s
-					p "Joining ID: " + current_user.id.to_s
 					if player.user_id == current_user.id
 						player_exists = true
 					end
@@ -29,8 +26,6 @@
 				@game.players.create!(user: current_user, position: 0, balance: 2000.00, email: current_user.email)
 				Pusher.trigger('game-'+params[:id].to_s, 'new-player', {:player => @game.players.length})
 			end
-			p @game.players.length
-			p "Channel: game-"+params[:id].to_s
 			redirect_to :action => "show", id: params[:id] 
 		end
 
@@ -44,5 +39,12 @@
 	#Game Chat Update
 	def chat_message
 		Pusher.trigger('game-'+params[:id].to_s+'-chat', 'new-message', {:message => params[:message], :uid => current_user.email})
+	end
+
+	def start_button
+		p "game status: " + @game.status
+		@game = Game.find(params[:id])
+		@game.status = :inprogress
+		p "game status after: " + @game.status
 	end
 end
