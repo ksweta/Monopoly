@@ -42,9 +42,7 @@
 	end
 
 	def start_button
-		p "game status: " + @game.status
 		@game = Game.find(params[:id])
 		@game.status = :inprogress
-		p "game status after: " + @game.status
 	end
 end

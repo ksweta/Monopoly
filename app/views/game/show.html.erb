@@ -31,11 +31,13 @@
 	$(document).ready( function(){
 		var current = "<%= current_user.email %>";
 		var host = "<%= @game.players[0].email %>";
+
 		if (current == host) {
 			$(".game-buttons").load("<%= @game.id %> #start-button");
 		} else {
 			$(".game-buttons").load("<%= @game.id %> #waiting-on-host");
 		}
+		
 	}); 
 </script>
 
@@ -152,4 +154,5 @@
 <div id="waiting-on-host" class="grey">
 	<button>Waiting on Host</button>
 </div>
+
 </div>

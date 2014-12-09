@@ -11,6 +11,7 @@ Rails.application.routes.draw do
   post 'welcome/submit'
   post 'pusher/auth'
   post 'game/chat_message'
+  post 'game/start_button'
 
 
   # The priority is based upon order of creation: first created -> highest priority.

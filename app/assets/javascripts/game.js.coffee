@@ -13,7 +13,6 @@
 	
 	window.start_game = ->
 		id = $("#game-id").val()
-		alert "yo"
 		$.ajax
    type: "POST"
    url: "start_button"
