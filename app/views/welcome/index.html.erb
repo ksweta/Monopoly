@@ -43,8 +43,9 @@
 <div class="friends-list">
 	<h2>Friends List</h2>
 	<ul>
-		<li>Dave</li>
-		<li>Linda</li>
-		<li>McLovin</li>
+		<% @users.each do |user|%>
+
+		<li><%= user.email %></li>
+		<% end %>
 	</ul>
 </div>
