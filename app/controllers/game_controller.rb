@@ -27,9 +27,9 @@
 
 			unless player_exists
 				@game.players.create!(user: current_user, position: 0, balance: 2000.00, email: current_user.email)
+				Pusher.trigger('game-'+params[:id].to_s, 'new-player', {:player => @game.players.length})
 			end
 			p "Channel: game-"+params[:id].to_s
-			Pusher.trigger('game-'+params[:id].to_s, 'new-player', {:player => @game.players.length})
 			redirect_to :action => "show", id: params[:id] 
 		end
 

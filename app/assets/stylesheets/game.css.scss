@@ -48,9 +48,9 @@ td {
 	position: absolute;
 	text-align: left;
 	left: 1%;
-	top: 16vw;
+	top: 18vw;
 	width: 48%;
-	height: 66%;
+	height: 60%;
 	color: black;
 	background-color: #fff;
 
@@ -71,10 +71,53 @@ td {
 
 .game-chat-messages {
 	position: absolute;
+	background-color: #021F32;
 	top: 10%;
 	height: 80%;
 	width: 100%;
 	overflow-y: auto;
+}
+
+.chat-submit-buttons {
+	
+}
+
+.game-buttons {
+	position: absolute;
+	background-color: red;
+	top: 13vw;
+	left: 1vw;
+	height: 4vw;
+	width: 48vw;
+}
+
+.loadable-buttons {
+	display: none;
+}
+
+#start-button {
+	top: 0;
+	left: 0;
+	width: 100%;
+	height: 100%;
+}
+
+#start-button button{
+	width: 100%;
+	height: 100%;
+}
+
+#waiting-on-host {
+	position:relative;
+	top: 0;
+	left: 0;
+	width: 100%;
+	height: 100%;
+}
+
+#waiting-on-host button {
+	height: 100%;
+	width: 100%;
 }
 
 .row {
@@ -82,6 +125,12 @@ td {
 	width: 99%;
 	margin: 1px;
 	margin-left: 5px;
+	word-wrap: break-word;
+	color: white;
+}
+
+.status-message {
+	color: yellow;
 }
 
 .game-chat input{
@@ -235,6 +284,7 @@ td {
 .yellow { background-color: #fef200; }
 .green{ background-color: #1fb25a; }
 .blue { background-color: #0072bb; }
+.grey { background-color: grey; }
 
 
 //Top, Left, Bottom, Right and Corner board tile styling

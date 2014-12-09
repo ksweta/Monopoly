@@ -3,6 +3,19 @@
 	var channel = pusher.subscribe('game-<%= @game.id %>');
 	var chat = pusher.subscribe('game-<%= @game.id %>-chat')
 	
+	pusher.connection.bind('connecting', function() {
+  $('.game-chat-messages').append('<p class="row status-message"> Connecting to game channel...</p>');
+ });
+ pusher.connection.bind('connected', function() {
+  $('.game-chat-messages').append('<p class="row status-message">Connected to game channel!</p>');
+  $('.game-chat-messages').append('<p class="row status-message">Wating on host to start the game.</p>');
+ });
+ pusher.connection.bind('failed', function() {
+ 	$('.game-chat-messages').text('Connection to Pusher failed :(');
+ });
+ channel.bind('subscription_error', function(status) {
+  $('.game-chat-messages').text('Pusher subscription_error');
+	});
 	//new player
 	channel.bind('new-player', function(data) {
 		//alert("loading <%= @game.id %> .player-"+data.player);
@@ -13,7 +26,17 @@
 		$(".game-chat-messages").append('<p class="row"><strong>' + data.uid + ":</strong>" + data.message + '</p>');
 		$(".game-chat-messages").animate({ scrollTop: $(".game-chat-messages")[0].scrollHeight }, "slow");
 	});
-	//alert('subscribed to game-<%= @game.id%>'); 
+	//alert('subscribed to game-<%= @game.id%>');
+
+	$(document).ready( function(){
+		var current = "<%= current_user.email %>";
+		var host = "<%= @game.players[0].email %>";
+		if (current == host) {
+			$(".game-buttons").load("<%= @game.id %> #start-button");
+		} else {
+			$(".game-buttons").load("<%= @game.id %> #waiting-on-host");
+		}
+	}); 
 </script>
 
 <div class="player-wrapper">
@@ -46,20 +69,22 @@
 </div>
 </div>
 
-<div class="game-chat teal">
+<div class="game-chat">
 	<h1 class="blue">Game <%= @game.id %> Chat:</h1>
+	
 	<div class="game-chat-messages">
-		
 	</div>
 
+	<div class="chat-submit-buttons blue">
 		<input id="text" type="text">
 		<input id="game-id" type="hidden" value="<%= @game.id %>">
 		<button class="submit" onclick="chat_submit()">Submit</button>
+		</div>
 </div>
 
-<%= button_to "Roll Dice", {}, {:class => "action-button roll green"} %>
-<%= button_to "Buy Houses", {}, {:class => "action-button buy green"} %>
-
+<div class="game-buttons">
+	
+</div>
 
 <div class="game-board">
 
@@ -117,4 +142,14 @@
 		<div class="right-tile luxury-tax"><%= image_tag "luxury-tax.jpg" %></div>
 		<div class="right-tile boardwalk"><div class="title-right blue"></div></div>
 	</div>
+</div>
+
+<div class="loadable-buttons">
+<div id="start-button" class="green">
+	<button onclick"start()">Start</button>
+</div>
+
+<div id="waiting-on-host" class="grey">
+	<button>Waiting on Host</button>
+</div>
 </div>

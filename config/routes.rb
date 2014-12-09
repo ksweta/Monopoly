@@ -4,6 +4,7 @@ Rails.application.routes.draw do
 
   get 'game/index'
   get 'game/board'
+  get '/game/buttons' => 'game#buttons'
   get 'host_game/host'
   get 'welcome/index'
 
@@ -30,7 +31,6 @@ Rails.application.routes.draw do
   get '/game/game/new' => 'game#create'
   get '/game/game/join' => 'game#join'
   get '/game/join' => 'game#join'
-
 
   # Example of named route that can be invoked with purchase_url(id: product.id)
   #   get 'products/:id/purchase' => 'catalog#purchase', as: :purchase
