@@ -1,9 +1,17 @@
 <script type="text/javascript">
 	var pusher = new Pusher('4eff344ae11ed3c814c8');
 	var channel = pusher.subscribe('game-<%= @game.id %>');
+	var chat = pusher.subscribe('game-<%= @game.id %>-chat')
+	
+	//new player
 	channel.bind('new-player', function(data) {
 		//alert("loading <%= @game.id %> .player-"+data.player);
 		$(".player-wrapper").load("<%= @game.id %> .player-frames");
+	});
+
+	chat.bind('new-message', function(data) {
+		$(".game-chat-messages").append('<p class="row"><strong>' + data.uid + ":</strong>" + data.message + '</p>');
+		$(".game-chat-messages").animate({ scrollTop: $(".game-chat-messages")[0].scrollHeight }, "slow");
 	});
 	//alert('subscribed to game-<%= @game.id%>'); 
 </script>
@@ -38,25 +46,15 @@
 </div>
 </div>
 
-<div class="game-chat">
+<div class="game-chat teal">
 	<h1 class="blue">Game <%= @game.id %> Chat:</h1>
-	<br>
-	<br>
-	<br>
-	<br>
-	<br>
-	<br>
-	<ul>
-		<li><strong>Player 2:</strong> Ennui selfies hoodie, direct trade deep v you probably haven't heard of them biodiesel church-key XOXO tote bag kogi next level. Dreamcatcher hoodie Austin, organic tilde pug fixie cold-pressed trust fund ethical freegan. Banksy stumptown fap, church-key umami</li>
-		<li><strong>Player 4:</strong> Actually swag Tonx, fannel. Actually flexitarian quinoa forage Echo Park, </li>
-		<li><strong>Player 1:</strong> Schlitz direct trade swag selvage, vegan distillery seitan +1 readymade chillwave put a bird on it</li>
-		<li><strong>Player 1:</strong> DIY, Four loko PBR roof party keytar viral</li>
-	</ul>
+	<div class="game-chat-messages">
+		
+	</div>
 
-	<form>
-		<input type="text">
-		<button class="submit">Submit</button>
-	</form>
+		<input id="text" type="text">
+		<input id="game-id" type="hidden" value="<%= @game.id %>">
+		<button class="submit" onclick="chat_submit()">Submit</button>
 </div>
 
 <%= button_to "Roll Dice", {}, {:class => "action-button roll green"} %>

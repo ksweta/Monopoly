@@ -6,3 +6,13 @@ jQuery ->
 	$(document).ready(
 	
 	);
+
+	window.chat_submit = ->
+		message = $("#text").val()
+		id = $("#game-id").val()
+		#alert id
+		$.ajax
+   type: "POST"
+   url: "chat_message"
+   data: {message: message, id: id}
+	

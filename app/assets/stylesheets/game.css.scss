@@ -6,10 +6,6 @@
 *= require_self
 */
 
-form, p {
-	display: inline;
-}
-
 td {
 	text-align: center;
 	border: 1px solid white;
@@ -73,9 +69,19 @@ td {
 	border-top-right-radius: 15px;
 }
 
-.game-chat ul{
-	position: relative;
-	font-size: 20px;
+.game-chat-messages {
+	position: absolute;
+	top: 10%;
+	height: 80%;
+	width: 100%;
+	overflow-y: auto;
+}
+
+.row {
+	display: block;
+	width: 99%;
+	margin: 1px;
+	margin-left: 5px;
 }
 
 .game-chat input{
