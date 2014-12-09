@@ -31,7 +31,7 @@
 
 	def create
 		@game = Game.create!(turn: 0, status: :initialized)
-		p @game.players.create!(user: current_user, position: 0, balance: 2000.00, email: current_user.email)
+		@game.players.create!(user: current_user, position: 0, balance: 2000.00, email: current_user.email)
 	  	redirect_to :action => "show", id: @game.id #welcome_path
 	end
 
