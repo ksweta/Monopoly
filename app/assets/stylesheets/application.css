@@ -31,63 +31,68 @@
 
 
 body {
-	background-color: #000;
-	color: #fff;
-	font-family: 'Lato', sans-serif;
+  background-color: #333;
+  color: #fff;
+  font-family: 'Lato', sans-serif;
+}
+
+a {
+  color: #4099ff;
 }
 
 .body-content{
-	position: absolute;
-	top: 10%;
+  position: absolute;
+  top: 60px;
 }
 
 .banner {
-	position: absolute;
-	width: 100%;
-	height: 10%;
-	top: 0;
-	left: 0;
+  position: absolute;
+  width: 100%;
+  height: 60px;
+  top: 0;
+  left: 0;
 
-	text-align:center;
-	color: #000;
-	background-color: #fff;
+  text-align:center;
+  color: #000;
+  background-color: #fff;
 }
 
 .title-header {
-	position: absolute;
-	text-align: center;
-	left: 35%;
-	width: 30%;
-	font-size: 50px;
+  position: absolute;
+  text-align: center;
+  left: 35%;
+  width: 30%;
+  font-size: 50px;
+  text-transform: uppercase;
 }
 
 .navbar-link {
-	display: inline;
+  display: inline;
 }
 
 .login {
-	position: absolute;
-	width: 500px;
-	left: calc(100% - 500px);
+  position: absolute;
+  width: 500px;
+  left: calc(100% - 500px);
 }
 
 .login-text {
-	position: absolute;
-	text-align: right;
-	left: 0;
-	width: 70%;
+  position: absolute;
+  text-align: right;
+  left: 0;
+  width: 70%;
 }
 
 .logout-button {
-	position: absolute;
-	left: 70%;
-	width: 30%;
+  position: absolute;
+  left: 70%;
+  width: 30%;
 }
 
 .logout-button input{
-	width: 80%;
-	color: white;
-	background-color: blue;
-	border: none;
-	border-radius: 5px;
+  width: 80%;
+  color: white;
+  background-color: blue;
+  border: none;
+  border-radius: 5px;
 }
