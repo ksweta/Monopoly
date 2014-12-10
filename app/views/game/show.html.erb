@@ -44,10 +44,7 @@
 
 		var current = "<%= current_user.email %>";
 		var player_turn = data.email;
-		//alert("data.turn: " + data.turn);
-		//alert("data.player: " + data.player);
-		//alert(player_turn +"="+current);
-		//alert(data.position);
+
 		$(".player-wrapper").load("<%= @game.id %> .player-frames");	
 
 		if(current == player_turn) { 
@@ -110,7 +107,7 @@
 
 <div class="player-wrapper">
 	<div class="player-frames">
-		<div class="player-1 yellow">
+		<div class="player-1">
 			<p>Player 1: <%= 
 				if current_user.email == @game.players[0].email 
 					"You"
