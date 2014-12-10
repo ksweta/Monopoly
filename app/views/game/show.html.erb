@@ -24,8 +24,15 @@
 	
 	//new player
 	channel.bind('new-player', function(data) {
-		//alert("loading <%= @game.id %> .player-"+data.player);
+		var current = "<%= current_user.email %>";
+		var host = "<%= @game.players[0].email %>";
+
 		$(".player-wrapper").load("<%= @game.id %> .player-frames");
+		if (current == host) {
+				$(".game-buttons").load("<%= @game.id %> #start-button");
+			} else {
+				$(".game-buttons").load("<%= @game.id %> #waiting-on-host");
+		}
 	});
 	
 	//dice rolled
@@ -37,7 +44,9 @@
 
 		var current = "<%= current_user.email %>";
 		var player_turn = data.email;
-		//alert(player_turn);
+		//alert("data.turn: " + data.turn);
+		//alert("data.player: " + data.player);
+		//alert(player_turn +"="+current);
 
 		if(current == player_turn) { 
 			$('.game-buttons').load("<%= @game.id %> #roll-dice");
@@ -47,11 +56,11 @@
 		
 		var num_players = "<%= @game.players.length %>";
 		//update highlighted player
-		$(".player-"+data.turn).addClass("yellow");
-		if(data.turn == 1) {
+		$(".player-"+data.player).addClass("yellow");
+		if(data.player == 1) {
 			$(".player-"+num_players).removeClass("yellow");
 		} else {
-			$(".player-"+(data.turn-1)).removeClass("yellow");
+			$(".player-"+(data.player-1)).removeClass("yellow");
 		}
 	});
 
@@ -63,7 +72,7 @@
 	chat.bind('game-started', function(data){
 		$('.game-chat-messages').append('<p class="row status-message"> '+ data.message +'</p>');
 		var current = "<%= current_user.email %>";
-		var player_turn = "<%= @game.players[@game.turn].email %>";
+		var player_turn = data.player_turn;
 
 		if(current == player_turn) { 
 			$('.game-buttons').load("<%= @game.id %> #roll-dice");
@@ -98,27 +107,48 @@
 <div class="player-wrapper">
 	<div class="player-frames">
 		<div class="player-1 yellow">
-			<p>Player 1: <%= @game.players[0].email %></p>
+			<p>Player 1: <%= 
+				if current_user.email == @game.players[0].email 
+					"You"
+				else
+					@game.players[0].email
+				end%></p>
 			<p>Money: <%= @game.players[0].balance %></p>
 		</div>
 
 		<% if @game.players[1] then %>
 		<div class="player-2">
-			<p>Player 2: <%= @game.players[1].email %></p>
+			<p>Player 2: <%= 
+				if current_user.email == @game.players[1].email 
+					"You"
+				else
+					@game.players[1].email
+				end%></p>
+			</p>
 			<p>Money: <%= @game.players[1].balance %></p>
 		</div>
 		<% end %>
 
 		<% if @game.players[2] then %>
 		<div class="player-3">
-			<p>Player 3: <%= @game.players[2].email %></p>
+			<p>Player 3: <%= 
+				if current_user.email == @game.players[2].email 
+					"You"
+				else
+					@game.players[2].email
+				end%></p>
 			<p>Money: <%= @game.players[2].balance %></p>
 		</div>
 		<% end %>
 
 		<% if @game.players[3] then %>
 		<div class="player-4">
-			<p>Player 4: <%= @game.players[3].email %></p>
+			<p>Player 4: <%= 
+				if current_user.email == @game.players[0].email 
+					"You"
+				else
+					@game.players[0].email
+				end%></p>
 			<p>Money: <%= @game.players[3].balance %></p>
 		</div>
 		<% end %>

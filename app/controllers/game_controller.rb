@@ -46,7 +46,9 @@
 		@game = Game.find(params[:id])
 		@game.update(status: :inprogress)
 		p @game.status
-		Pusher.trigger('game-'+params[:id].to_s+'-chat', 'game-started', {:message => "The host has started the game. Goodluck and have fun!"})
+		Pusher.trigger('game-'+params[:id].to_s+'-chat', 'game-started', 
+			{:message => "The host has started the game. Goodluck and have fun!", 
+				:player_turn => @game.players[@game.turn].email})
 	end
 
 	def roll_dice
