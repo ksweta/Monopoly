@@ -24,8 +24,15 @@
 	
 	//new player
 	channel.bind('new-player', function(data) {
-		//alert("loading <%= @game.id %> .player-"+data.player);
+		var current = "<%= current_user.email %>";
+		var host = "<%= @game.players[0].email %>";
+
 		$(".player-wrapper").load("<%= @game.id %> .player-frames");
+		if (current == host) {
+				$(".game-buttons").load("<%= @game.id %> #start-button");
+			} else {
+				$(".game-buttons").load("<%= @game.id %> #waiting-on-host");
+		}
 	});
 	
 	//dice rolled
