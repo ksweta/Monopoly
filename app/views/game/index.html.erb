@@ -33,9 +33,7 @@
     <th>Status</th>
   </tr>
 
-	<% @games.each do |game| 
-		 if game.status == "initialized"
-		%>
+	<% @games.each do |game| %> 
 			<tr>
 				<td><%= game.id %></td> 
 				<td><%= game.players[0].email %> </td>
@@ -48,8 +46,7 @@
 				</td>
 	</form>
 	</tr>
-	<% end 
-		end %>
+	<% end %>
 	</table>
 	</div>
 	<% end %>

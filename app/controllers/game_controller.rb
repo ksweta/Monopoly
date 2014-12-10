@@ -55,12 +55,28 @@
 		@game = Game.find(params[:id])
 		roll = 2 + rand(11)
 		turn = @game.turn
+		position = @game.players[turn].position
+		position += roll
+		if position > 39 
+			position -= 39
+			balance = @game.players[turn].balance
+			balance += 200
+			@game.players[turn].update(balance: balance)
+		end
+
+		@game.players[turn].update(position: position)
+
 		if turn+1 < @game.players.length 
 			@game.update(turn: turn+1)
 		else 
 			@game.update(turn: 0)
 		end
-		Pusher.trigger('game-'+params[:id].to_s, 'dice-roll', {:player => turn + 1, :roll => roll, :turn => @game.turn+1, :email => @game.players[turn].email})
+		Pusher.trigger('game-'+params[:id].to_s, 'dice-roll', 
+			{:player => turn + 1, 
+			:roll => roll, 
+			:turn => @game.turn+1, 
+			:email => @game.players[turn].email,
+			:position => position})
 	end
 
 end

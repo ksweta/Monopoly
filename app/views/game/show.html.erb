@@ -47,6 +47,8 @@
 		//alert("data.turn: " + data.turn);
 		//alert("data.player: " + data.player);
 		//alert(player_turn +"="+current);
+		//alert(data.position);
+		$(".player-wrapper").load("<%= @game.id %> .player-frames");	
 
 		if(current == player_turn) { 
 			$('.game-buttons').load("<%= @game.id %> #roll-dice");
@@ -62,6 +64,9 @@
 		} else {
 			$(".player-"+(data.player-1)).removeClass("yellow");
 		}
+
+		//update player piece
+
 	});
 
 	chat.bind('new-message', function(data) {
@@ -86,7 +91,6 @@
 		var host = "<%= @game.players[0].email %>";
 		var player_turn = "<%= @game.players[@game.turn].email %>";
 		var status = "<%= @game.status %>";
-		//alert(status);
 
 		if(status == "initialized") {
 			if (current == host) {
@@ -114,6 +118,7 @@
 					@game.players[0].email
 				end%></p>
 			<p>Money: <%= @game.players[0].balance %></p>
+			<p id="player-1-pos">Position: <%= @game.players[0].position %></p>
 		</div>
 
 		<% if @game.players[1] then %>
@@ -126,6 +131,7 @@
 				end%></p>
 			</p>
 			<p>Money: <%= @game.players[1].balance %></p>
+			<p id="player-2-pos">Position: <%= @game.players[1].position %></p>
 		</div>
 		<% end %>
 
@@ -138,6 +144,7 @@
 					@game.players[2].email
 				end%></p>
 			<p>Money: <%= @game.players[2].balance %></p>
+			<p id="player-3-pos">Position: <%= @game.players[2].position %></p>
 		</div>
 		<% end %>
 
@@ -150,6 +157,7 @@
 					@game.players[0].email
 				end%></p>
 			<p>Money: <%= @game.players[3].balance %></p>
+			<p id="player-4-pos">Position: <%= @game.players[3].position %></p>
 		</div>
 		<% end %>
 	</div>
@@ -179,54 +187,57 @@
 	<div class="board-tiles">
 		
 		<!-- Corner board tiles for the entire game-->
-		<div class="corner-tile free-parking"><%= image_tag "free_parking.jpg" %></div>
-		<div class="corner-tile go-to-jail"><%= image_tag "jail.jpg" %></div>
-		<div class="corner-tile go"><%= image_tag "go.jpg" %></div>
-		<div class="corner-tile jail"><div class="in-jail orange"><%= image_tag "in_jail.jpg" %></div></div>
+		<div id="20" class="corner-tile free-parking"><%= image_tag "free_parking.jpg" %></div>
+		<div id="30" class="corner-tile go-to-jail"><%= image_tag "jail.jpg" %></div>
+		<div id="0" class="corner-tile go">
+		<div class="player-piece">1</div>
+		<%= image_tag "go.jpg" %>
+		</div>
+		<div id="10" class="corner-tile jail"><div class="in-jail orange"><%= image_tag "in_jail.jpg" %></div></div>
 
 		<!-- Bottom board tiles-->
-		<div class="bottom-tile mediteranean-avenue"><div class="title-bottom brown"></div></div>
-		<div class="bottom-tile community-chest-bottom"><%= image_tag "community-chest-bottom.jpg" %></div>
-		<div class="bottom-tile baltic-avenue"><div class="title-bottom brown"></div></div>
-		<div class="bottom-tile income-tax-bottom"><%= image_tag "income-tax.jpg" %></div>
-		<div class="bottom-tile reading-railroad"><%= image_tag "reading-railroad.jpg" %></div>
-		<div class="bottom-tile oriental-avenue"><div class="title-bottom teal"></div></div>
-		<div class="bottom-tile chance-bottom"><%= image_tag "chance-bottom.jpg" %></div>
-		<div class="bottom-tile vermont-avenue"><div class="title-bottom teal"></div></div>
-		<div class="bottom-tile connecticut-avenue"><div class="title-bottom teal"></div></div>
+		<div id="1" class="bottom-tile mediteranean-avenue"><div class="title-bottom brown"></div></div>
+		<div id="2" class="bottom-tile community-chest-bottom"><%= image_tag "community-chest-bottom.jpg" %></div>
+		<div id="3" class="bottom-tile baltic-avenue"><div class="title-bottom brown"></div></div>
+		<div id="4" class="bottom-tile income-tax-bottom"><%= image_tag "income-tax.jpg" %></div>
+		<div id="5" class="bottom-tile reading-railroad"><%= image_tag "reading-railroad.jpg" %></div>
+		<div id="6" class="bottom-tile oriental-avenue"><div class="title-bottom teal"></div></div>
+		<div id="7" class="bottom-tile chance-bottom"><%= image_tag "chance-bottom.jpg" %></div>
+		<div id="8" class="bottom-tile vermont-avenue"><div class="title-bottom teal"></div></div>
+		<div id="9" class="bottom-tile connecticut-avenue"><div class="title-bottom teal"></div></div>
 
 		<!-- Left board tiles-->
-		<div class="left-tile st-charles-place"><div class="title-left pink"></div></div>
-		<div class="left-tile electric-company"><%= image_tag "electric-company.jpg" %></div>
-		<div class="left-tile states-avenue"><div class="title-left pink"></div></div>
-		<div class="left-tile virginia-avenue"><div class="title-left pink"></div></div>
-		<div class="left-tile pennsylvania-railroad"><%= image_tag "pennsylvania-railroad.jpg" %></div>
-		<div class="left-tile st-james-place"><div class="title-left orange"></div></div>
-		<div class="left-tile community-chest-left"><%= image_tag "community-chest-left.jpg" %></div>
-		<div class="left-tile tennessee-avenue"><div class="title-left orange"></div></div>
-		<div class="left-tile new-york-avenue"><div class="title-left orange"></div></div>
+		<div id="11" class="left-tile st-charles-place"><div class="title-left pink"></div></div>
+		<div id="12" class="left-tile electric-company"><%= image_tag "electric-company.jpg" %></div>
+		<div id="13" class="left-tile states-avenue"><div class="title-left pink"></div></div>
+		<div id="14" class="left-tile virginia-avenue"><div class="title-left pink"></div></div>
+		<div id="15" class="left-tile pennsylvania-railroad"><%= image_tag "pennsylvania-railroad.jpg" %></div>
+		<div id="16" class="left-tile st-james-place"><div class="title-left orange"></div></div>
+		<div id="17" class="left-tile community-chest-left"><%= image_tag "community-chest-left.jpg" %></div>
+		<div id="18" class="left-tile tennessee-avenue"><div class="title-left orange"></div></div>
+		<div id="19" class="left-tile new-york-avenue"><div class="title-left orange"></div></div>
 
 		<!-- Top board tiles-->
-		<div class="top-tile kentucky-avenue"><div class="title-top red"></div></div>
-		<div class="top-tile chance-top"><%= image_tag "chance-top.jpg" %></div>
-		<div class="top-tile indiana-avenue"><div class="title-top red"></div></div>
-		<div class="top-tile illinois-avenue"><div class="title-top red"></div></div>
-		<div class="top-tile b-n-o-railroad"><%= image_tag "b-n-o-railroad.jpg" %></div>
-		<div class="top-tile atlantic-avenue"><div class="title-top yellow"></div></div>
-		<div class="top-tile ventnor-avenue"><div class="title-top yellow"></div></div>
-		<div class="top-tile water-works"><%= image_tag "water-works.jpg" %></div>
-		<div class="top-tile marvin-gardens"><div class="title-top yellow"></div></div>
+		<div id="21" class="top-tile kentucky-avenue"><div class="title-top red"></div></div>
+		<div id="22" class="top-tile chance-top"><%= image_tag "chance-top.jpg" %></div>
+		<div id="23" class="top-tile indiana-avenue"><div class="title-top red"></div></div>
+		<div id="24" class="top-tile illinois-avenue"><div class="title-top red"></div></div>
+		<div id="25" class="top-tile b-n-o-railroad"><%= image_tag "b-n-o-railroad.jpg" %></div>
+		<div id="26" class="top-tile atlantic-avenue"><div class="title-top yellow"></div></div>
+		<div id="27" class="top-tile ventnor-avenue"><div class="title-top yellow"></div></div>
+		<div id="28" class="top-tile water-works"><%= image_tag "water-works.jpg" %></div>
+		<div id="29" class="top-tile marvin-gardens"><div class="title-top yellow"></div></div>
 
 		<!-- Right board tiles -->
-		<div class="right-tile pacific-avenue"><div class="title-right green"></div></div>
-		<div class="right-tile north-carolina-avenue"><div class="title-right green"></div></div>
-		<div class="right-tile community-chest-right"><%= image_tag "community-chest-right.jpg" %></div>
-		<div class="right-tile pennsylvania-avenue"><div class="title-right green"></div></div>
-		<div class="right-tile short-line"><%= image_tag "short-line.jpg" %></div>
-		<div class="right-tile chance-right"><%= image_tag "chance-right.jpg" %></div>
-		<div class="right-tile park-place"><div class="title-right blue"></div></div>
-		<div class="right-tile luxury-tax"><%= image_tag "luxury-tax.jpg" %></div>
-		<div class="right-tile boardwalk"><div class="title-right blue"></div></div>
+		<div id="31" class="right-tile pacific-avenue"><div class="title-right green"></div></div>
+		<div id="32" class="right-tile north-carolina-avenue"><div class="title-right green"></div></div>
+		<div id="33" class="right-tile community-chest-right"><%= image_tag "community-chest-right.jpg" %></div>
+		<div id="34" class="right-tile pennsylvania-avenue"><div class="title-right green"></div></div>
+		<div id="35" class="right-tile short-line"><%= image_tag "short-line.jpg" %></div>
+		<div id="36" class="right-tile chance-right"><%= image_tag "chance-right.jpg" %></div>
+		<div id="37" class="right-tile park-place"><div class="title-right blue"></div></div>
+		<div id="38" class="right-tile luxury-tax"><%= image_tag "luxury-tax.jpg" %></div>
+		<div id="39" class="right-tile boardwalk"><div class="title-right blue"></div></div>
 	</div>
 </div>
 
@@ -246,3 +257,6 @@
 	<div id="waiting-for-turn" class="grey loadable-button">
 		<button class="loadable-button">Waiting for turn.</button>
 	</div>
+
+	<div id="empty"></div>
+</div>
