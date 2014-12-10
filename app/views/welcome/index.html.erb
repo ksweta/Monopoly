@@ -41,11 +41,10 @@
 </div>
 
 <div class="friends-list">
-	<h2>Friends List</h2>
+	<h2>Users Online</h2>
 	<ul>
-		<% @users.each do |user|%>
-
-		<li><%= user.email %></li>
+		<% @users.each do |userr|%>
+			<li><%= userr.email %></li>
 		<% end %>
 	</ul>
 </div>
