@@ -42,7 +42,11 @@
 				<td>
 					<form action="game/join">
 					<input type="hidden" value="<%= game.id %>" name="id">
-					<input type="submit" value="Join">
+					<% if game.players.length < 4 %>
+						<input type="submit" value="Join">
+					<% else %>
+						 <button type="button" disabled>Full</button> 
+					<% end %>	
 				</td>
 	</form>
 	</tr>

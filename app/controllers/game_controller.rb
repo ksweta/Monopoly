@@ -26,7 +26,7 @@
 				@game.players.create!(user: current_user, position: 0, balance: 2000.00, email: current_user.email)
 				Pusher.trigger('game-'+params[:id].to_s, 'new-player', {:player => @game.players.length})
 			end
-			redirect_to :action => "show", id: params[:id] 
+			 	redirect_to :action => "show", id: params[:id] 
 		end
 
 	def create
