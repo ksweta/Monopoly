@@ -6,6 +6,10 @@
 *= require_self
 */
 
+body {
+	background-color: black;
+}
+
 td {
 	text-align: center;
 	border: 1px solid white;
@@ -20,14 +24,6 @@ td {
 	border: none;
 	border-radius: 10px;
 	color: #fff;
-}
-
-.roll {
-	left: 1.2%;
-}
-
-.buy {
-	left: 25.6%;
 }
 
 .player-frames {
@@ -84,7 +80,6 @@ td {
 
 .game-buttons {
 	position: absolute;
-	background-color: red;
 	top: 13vw;
 	left: 1vw;
 	height: 4vw;
@@ -93,6 +88,13 @@ td {
 
 .loadable-buttons {
 	display: none;
+}
+
+.loadable-button {
+	top: 0;
+	left: 0;
+	height: 100%;
+	width: 100%;
 }
 
 #start-button {
@@ -119,6 +121,8 @@ td {
 	height: 100%;
 	width: 100%;
 }
+
+
 
 .row {
 	display: block;

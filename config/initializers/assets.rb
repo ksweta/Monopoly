@@ -16,6 +16,7 @@ Rails.application.config.assets.precompile += %w( welcome.js )
 Rails.application.config.assets.precompile += %w( host_game.js )
 Rails.application.config.assets.precompile += %w( game.js )
 Rails.application.config.assets.precompile += %w( message.js )
+Rails.application.config.assets.precompile += %w( custom_game.js )
 
 # Precompile additional assets.
 # application.js, application.css, and all non-JS/CSS in app/assets folder are already added.

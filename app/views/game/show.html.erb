@@ -4,71 +4,125 @@
 	var chat = pusher.subscribe('game-<%= @game.id %>-chat')
 	
 	pusher.connection.bind('connecting', function() {
-  $('.game-chat-messages').append('<p class="row status-message"> Connecting to game channel...</p>');
- });
- pusher.connection.bind('connected', function() {
-  $('.game-chat-messages').append('<p class="row status-message">Connected to game channel!</p>');
-  $('.game-chat-messages').append('<p class="row status-message">Wating on host to start the game.</p>');
- });
- pusher.connection.bind('failed', function() {
- 	$('.game-chat-messages').text('Connection to Pusher failed :(');
- });
- channel.bind('subscription_error', function(status) {
-  $('.game-chat-messages').text('Pusher subscription_error');
+		$('.game-chat-messages').append('<p class="row status-message"> Connecting to game channel...</p>');
 	});
+	pusher.connection.bind('connected', function() {
+		$('.game-chat-messages').append('<p class="row status-message">Connected to game channel!</p>');
+		var status = "<%= @game.status %>";
+		if(status == "initialized") {
+			$('.game-chat-messages').append('<p class="row status-message">Wating on host to start the game.</p>');
+		} else {
+			$('.game-chat-messages').append('<p class="row status-message">Waiting for turn.</p>');
+		}
+	});
+	pusher.connection.bind('failed', function() {
+		$('.game-chat-messages').text('Connection to Pusher failed :(');
+	});
+	channel.bind('subscription_error', function(status) {
+		$('.game-chat-messages').text('Pusher subscription_error');
+	});
+	
 	//new player
 	channel.bind('new-player', function(data) {
 		//alert("loading <%= @game.id %> .player-"+data.player);
 		$(".player-wrapper").load("<%= @game.id %> .player-frames");
+	});
+	
+	//dice rolled
+	channel.bind('dice-roll', function(data) {
+		$('.game-chat-messages').append('<p class="row status-message"> Player '+ data.player +
+			' rolled a ' + data.roll +'. </p>');
+		$('.game-chat-messages').append('<p class="row status-message">It is now Player '+data.turn+'\'s turn.</p>');
+		$(".game-chat-messages").animate({ scrollTop: $(".game-chat-messages")[0].scrollHeight }, "slow");
+
+		var current = "<%= current_user.email %>";
+		var player_turn = data.email;
+		//alert(player_turn);
+
+		if(current == player_turn) { 
+			$('.game-buttons').load("<%= @game.id %> #roll-dice");
+		} else {
+			$('.game-buttons').load("<%= @game.id %> #waiting-for-turn");
+		}
+		
+		var num_players = "<%= @game.players.length %>";
+		//update highlighted player
+		$(".player-"+data.turn).addClass("yellow");
+		if(data.turn == 1) {
+			$(".player-"+num_players).removeClass("yellow");
+		} else {
+			$(".player-"+(data.turn-1)).removeClass("yellow");
+		}
 	});
 
 	chat.bind('new-message', function(data) {
 		$(".game-chat-messages").append('<p class="row"><strong>' + data.uid + ":</strong>" + data.message + '</p>');
 		$(".game-chat-messages").animate({ scrollTop: $(".game-chat-messages")[0].scrollHeight }, "slow");
 	});
-	//alert('subscribed to game-<%= @game.id%>');
+
+	chat.bind('game-started', function(data){
+		$('.game-chat-messages').append('<p class="row status-message"> '+ data.message +'</p>');
+		var current = "<%= current_user.email %>";
+		var player_turn = "<%= @game.players[@game.turn].email %>";
+
+		if(current == player_turn) { 
+			$('.game-buttons').load("<%= @game.id %> #roll-dice");
+		} else {
+			$('.game-buttons').load("<%= @game.id %> #waiting-for-turn");
+		}
+	});
 
 	$(document).ready( function(){
 		var current = "<%= current_user.email %>";
 		var host = "<%= @game.players[0].email %>";
+		var player_turn = "<%= @game.players[@game.turn].email %>";
+		var status = "<%= @game.status %>";
+		//alert(status);
 
-		if (current == host) {
-			$(".game-buttons").load("<%= @game.id %> #start-button");
+		if(status == "initialized") {
+			if (current == host) {
+				$(".game-buttons").load("<%= @game.id %> #start-button");
+			} else {
+				$(".game-buttons").load("<%= @game.id %> #waiting-on-host");
+			}
 		} else {
-			$(".game-buttons").load("<%= @game.id %> #waiting-on-host");
+			if(current == player_turn) { 
+				$('.game-buttons').load("<%= @game.id %> #roll-dice");
+			} else {
+				$('.game-buttons').load("<%= @game.id %> #waiting-for-turn");
+			}
 		}
-		
 	}); 
 </script>
 
 <div class="player-wrapper">
-<div class="player-frames">
-	<div class="player-1 teal">
-		<p>Player 1: <%= @game.players[0].email %></p>
-		<p>Money: <%= @game.players[0].balance %></p>
-	</div>
-	
-	<% if @game.players[1] then %>
-	<div class="player-2">
-		<p>Player 2: <%= @game.players[1].email %></p>
-		<p>Money: <%= @game.players[1].balance %></p>
-	</div>
-	<% end %>
-	
-	<% if @game.players[2] then %>
-	<div class="player-3">
-		<p>Player 3: <%= @game.players[2].email %></p>
-		<p>Money: <%= @game.players[2].balance %></p>
-	</div>
-	<% end %>
+	<div class="player-frames">
+		<div class="player-1 yellow">
+			<p>Player 1: <%= @game.players[0].email %></p>
+			<p>Money: <%= @game.players[0].balance %></p>
+		</div>
 
-	<% if @game.players[3] then %>
-	<div class="player-4">
-		<p>Player 4: <%= @game.players[3].email %></p>
-		<p>Money: <%= @game.players[3].balance %></p>
+		<% if @game.players[1] then %>
+		<div class="player-2">
+			<p>Player 2: <%= @game.players[1].email %></p>
+			<p>Money: <%= @game.players[1].balance %></p>
+		</div>
+		<% end %>
+
+		<% if @game.players[2] then %>
+		<div class="player-3">
+			<p>Player 3: <%= @game.players[2].email %></p>
+			<p>Money: <%= @game.players[2].balance %></p>
+		</div>
+		<% end %>
+
+		<% if @game.players[3] then %>
+		<div class="player-4">
+			<p>Player 4: <%= @game.players[3].email %></p>
+			<p>Money: <%= @game.players[3].balance %></p>
+		</div>
+		<% end %>
 	</div>
-	<% end %>
-</div>
 </div>
 
 <div class="game-chat">
@@ -81,7 +135,7 @@
 		<input id="text" type="text">
 		<input id="game-id" type="hidden" value="<%= @game.id %>">
 		<button class="submit" onclick="chat_submit()">Submit</button>
-		</div>
+	</div>
 </div>
 
 <div class="game-buttons">
@@ -147,12 +201,18 @@
 </div>
 
 <div class="loadable-buttons">
-<div id="start-button" class="green">
-	<button onclick="start_game()">Start</button>
-</div>
+	<div id="start-button" class="green loadable-button">
+		<button class="green loadable-button" onclick="start_game()">Start</button>
+	</div>
 
-<div id="waiting-on-host" class="grey">
-	<button>Waiting on Host</button>
-</div>
+	<div id="waiting-on-host" class="grey loadable-button">
+		<button class="loadable-button">Waiting on Host</button>
+	</div>
 
-</div>
+	<div id="roll-dice" class="grey loadable-button">
+		<button class="blue loadable-button" onclick="roll_dice()">Roll Dice</button>
+	</div>
+
+	<div id="waiting-for-turn" class="grey loadable-button">
+		<button class="loadable-button">Waiting for turn.</button>
+	</div>

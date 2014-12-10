@@ -17,3 +17,10 @@
    type: "POST"
    url: "start_button"
    data: {id: id}
+
+ window.roll_dice = ->
+		id = $("#game-id").val()
+		$.ajax
+   type: "POST"
+   url: "roll_dice"
+   data: {id: id} 	

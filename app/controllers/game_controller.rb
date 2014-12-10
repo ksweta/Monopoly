@@ -42,7 +42,23 @@
 	end
 
 	def start_button
+		p "IN START GAME"
 		@game = Game.find(params[:id])
-		@game.status = :inprogress
+		@game.update(status: :inprogress)
+		p @game.status
+		Pusher.trigger('game-'+params[:id].to_s+'-chat', 'game-started', {:message => "The host has started the game. Goodluck and have fun!"})
 	end
+
+	def roll_dice
+		@game = Game.find(params[:id])
+		roll = 2 + rand(11)
+		turn = @game.turn
+		if turn+1 < @game.players.length 
+			@game.update(turn: turn+1)
+		else 
+			@game.update(turn: 0)
+		end
+		Pusher.trigger('game-'+params[:id].to_s, 'dice-roll', {:player => turn + 1, :roll => roll, :turn => @game.turn+1, :email => @game.players[turn].email})
+	end
+
 end
