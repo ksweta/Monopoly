@@ -4,11 +4,16 @@ Rails.application.routes.draw do
 
   get 'game/index'
   get 'game/board'
+  get '/game/buttons' => 'game#buttons'
   get 'host_game/host'
   get 'welcome/index'
 
   post 'welcome/submit'
   post 'pusher/auth'
+  post 'game/chat_message'
+  post 'game/start_button'
+  post 'game/roll_dice'
+
 
   # The priority is based upon order of creation: first created -> highest priority.
   # See how all your routes lay out with "rake routes".
@@ -29,7 +34,6 @@ Rails.application.routes.draw do
   get '/game/game/new' => 'game#create'
   get '/game/game/join' => 'game#join'
   get '/game/join' => 'game#join'
-
 
   # Example of named route that can be invoked with purchase_url(id: product.id)
   #   get 'products/:id/purchase' => 'catalog#purchase', as: :purchase

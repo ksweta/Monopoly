@@ -1,56 +1,184 @@
-
-<div class="player-frames">
-	<div class="player-1 teal">
-		<p>Player 1: <%= @game.players[0].email %></p>
-		<p>Money: <%= @game.players[0].balance %></p>
-	</div>
+<script type="text/javascript">
+	var pusher = new Pusher('4eff344ae11ed3c814c8');
+	var channel = pusher.subscribe('game-<%= @game.id %>');
+	var chat = pusher.subscribe('game-<%= @game.id %>-chat')
 	
-	<% if @game.players[1] then %>
-	<div class="player-2">
-		<p>Player 2: <%= @game.players[1].email %></p>
-		<p>Money: <%= @game.players[1].balance %></p>
-	</div>
-	<% end %>
+	pusher.connection.bind('connecting', function() {
+		$('.game-chat-messages').append('<p class="row status-message"> Connecting to game channel...</p>');
+	});
+	pusher.connection.bind('connected', function() {
+		$('.game-chat-messages').append('<p class="row status-message">Connected to game channel!</p>');
+		var status = "<%= @game.status %>";
+		if(status == "initialized") {
+			$('.game-chat-messages').append('<p class="row status-message">Wating on host to start the game.</p>');
+		} else {
+			$('.game-chat-messages').append('<p class="row status-message">Waiting for turn.</p>');
+		}
+	});
+	pusher.connection.bind('failed', function() {
+		$('.game-chat-messages').text('Connection to Pusher failed :(');
+	});
+	channel.bind('subscription_error', function(status) {
+		$('.game-chat-messages').text('Pusher subscription_error');
+	});
 	
-	<% if @game.players[2] then %>
-	<div class="player-3">
-		<p>Player 3: <%= @game.players[2].email %></p>
-		<p>Money: <%= @game.players[2].balance %></p>
-	</div>
-	<% end %>
+	//new player
+	channel.bind('new-player', function(data) {
+		var current = "<%= current_user.email %>";
+		var host = "<%= @game.players[0].email %>";
 
-	<% if @game.players[3] then %>
-	<div class="player-4">
-		<p>Player 4: <%= @game.players[3].email %></p>
-		<p>Money: <%= @game.players[3].balance %></p>
+		$(".player-wrapper").load("<%= @game.id %> .player-frames");
+		if (current == host) {
+				$(".game-buttons").load("<%= @game.id %> #start-button");
+			} else {
+				$(".game-buttons").load("<%= @game.id %> #waiting-on-host");
+		}
+	});
+	
+	//dice rolled
+	channel.bind('dice-roll', function(data) {
+		$('.game-chat-messages').append('<p class="row status-message"> Player '+ data.player +
+			' rolled a ' + data.roll +'. </p>');
+		$('.game-chat-messages').append('<p class="row status-message">It is now Player '+data.turn+'\'s turn.</p>');
+		$(".game-chat-messages").animate({ scrollTop: $(".game-chat-messages")[0].scrollHeight }, "slow");
+
+		var current = "<%= current_user.email %>";
+		var player_turn = data.email;
+		//alert("data.turn: " + data.turn);
+		//alert("data.player: " + data.player);
+		//alert(player_turn +"="+current);
+		//alert(data.position);
+		$(".player-wrapper").load("<%= @game.id %> .player-frames");	
+
+		if(current == player_turn) { 
+			$('.game-buttons').load("<%= @game.id %> #roll-dice");
+		} else {
+			$('.game-buttons').load("<%= @game.id %> #waiting-for-turn");
+		}
+		
+		var num_players = "<%= @game.players.length %>";
+		//update highlighted player
+		$(".player-"+data.player).addClass("yellow");
+		if(data.player == 1) {
+			$(".player-"+num_players).removeClass("yellow");
+		} else {
+			$(".player-"+(data.player-1)).removeClass("yellow");
+		}
+
+		//update player piece
+
+	});
+
+	chat.bind('new-message', function(data) {
+		$(".game-chat-messages").append('<p class="row"><strong>' + data.uid + ":</strong>" + data.message + '</p>');
+		$(".game-chat-messages").animate({ scrollTop: $(".game-chat-messages")[0].scrollHeight }, "slow");
+	});
+
+	chat.bind('game-started', function(data){
+		$('.game-chat-messages').append('<p class="row status-message"> '+ data.message +'</p>');
+		var current = "<%= current_user.email %>";
+		var player_turn = data.player_turn;
+
+		if(current == player_turn) { 
+			$('.game-buttons').load("<%= @game.id %> #roll-dice");
+		} else {
+			$('.game-buttons').load("<%= @game.id %> #waiting-for-turn");
+		}
+	});
+
+	$(document).ready( function(){
+		var current = "<%= current_user.email %>";
+		var host = "<%= @game.players[0].email %>";
+		var player_turn = "<%= @game.players[@game.turn].email %>";
+		var status = "<%= @game.status %>";
+
+		if(status == "initialized") {
+			if (current == host) {
+				$(".game-buttons").load("<%= @game.id %> #start-button");
+			} else {
+				$(".game-buttons").load("<%= @game.id %> #waiting-on-host");
+			}
+		} else {
+			if(current == player_turn) { 
+				$('.game-buttons').load("<%= @game.id %> #roll-dice");
+			} else {
+				$('.game-buttons').load("<%= @game.id %> #waiting-for-turn");
+			}
+		}
+	}); 
+</script>
+
+<div class="player-wrapper">
+	<div class="player-frames">
+		<div class="player-1 yellow">
+			<p>Player 1: <%= 
+				if current_user.email == @game.players[0].email 
+					"You"
+				else
+					@game.players[0].email
+				end%></p>
+			<p>Money: <%= @game.players[0].balance %></p>
+			<p id="player-1-pos">Position: <%= @game.players[0].position %></p>
+		</div>
+
+		<% if @game.players[1] then %>
+		<div class="player-2">
+			<p>Player 2: <%= 
+				if current_user.email == @game.players[1].email 
+					"You"
+				else
+					@game.players[1].email
+				end%></p>
+			</p>
+			<p>Money: <%= @game.players[1].balance %></p>
+			<p id="player-2-pos">Position: <%= @game.players[1].position %></p>
+		</div>
+		<% end %>
+
+		<% if @game.players[2] then %>
+		<div class="player-3">
+			<p>Player 3: <%= 
+				if current_user.email == @game.players[2].email 
+					"You"
+				else
+					@game.players[2].email
+				end%></p>
+			<p>Money: <%= @game.players[2].balance %></p>
+			<p id="player-3-pos">Position: <%= @game.players[2].position %></p>
+		</div>
+		<% end %>
+
+		<% if @game.players[3] then %>
+		<div class="player-4">
+			<p>Player 4: <%= 
+				if current_user.email == @game.players[0].email 
+					"You"
+				else
+					@game.players[0].email
+				end%></p>
+			<p>Money: <%= @game.players[3].balance %></p>
+			<p id="player-4-pos">Position: <%= @game.players[3].position %></p>
+		</div>
+		<% end %>
 	</div>
-	<% end %>
 </div>
 
 <div class="game-chat">
 	<h1 class="blue">Game <%= @game.id %> Chat:</h1>
-	<br>
-	<br>
-	<br>
-	<br>
-	<br>
-	<br>
-	<ul>
-		<li><strong>Player 2:</strong> Ennui selfies hoodie, direct trade deep v you probably haven't heard of them biodiesel church-key XOXO tote bag kogi next level. Dreamcatcher hoodie Austin, organic tilde pug fixie cold-pressed trust fund ethical freegan. Banksy stumptown fap, church-key umami</li>
-		<li><strong>Player 4:</strong> Actually swag Tonx, fannel. Actually flexitarian quinoa forage Echo Park, </li>
-		<li><strong>Player 1:</strong> Schlitz direct trade swag selvage, vegan distillery seitan +1 readymade chillwave put a bird on it</li>
-		<li><strong>Player 1:</strong> DIY, Four loko PBR roof party keytar viral</li>
-	</ul>
+	
+	<div class="game-chat-messages">
+	</div>
 
-	<form>
-		<input type="text">
-		<button class="submit">Submit</button>
-	</form>
+	<div class="chat-submit-buttons blue">
+		<input id="text" type="text">
+		<input id="game-id" type="hidden" value="<%= @game.id %>">
+		<button class="submit" onclick="chat_submit()">Submit</button>
+	</div>
 </div>
 
-<%= button_to "Roll Dice", {}, {:class => "action-button roll green"} %>
-<%= button_to "Buy Houses", {}, {:class => "action-button buy green"} %>
-
+<div class="game-buttons">
+	
+</div>
 
 <div class="game-board">
 
@@ -59,53 +187,76 @@
 	<div class="board-tiles">
 		
 		<!-- Corner board tiles for the entire game-->
-		<div class="corner-tile free-parking"><%= image_tag "free_parking.jpg" %></div>
-		<div class="corner-tile go-to-jail"><%= image_tag "jail.jpg" %></div>
-		<div class="corner-tile go"><%= image_tag "go.jpg" %></div>
-		<div class="corner-tile jail"><div class="in-jail orange"><%= image_tag "in_jail.jpg" %></div></div>
+		<div id="20" class="corner-tile free-parking"><%= image_tag "free_parking.jpg" %></div>
+		<div id="30" class="corner-tile go-to-jail"><%= image_tag "jail.jpg" %></div>
+		<div id="0" class="corner-tile go">
+		<div class="player-piece">1</div>
+		<%= image_tag "go.jpg" %>
+		</div>
+		<div id="10" class="corner-tile jail"><div class="in-jail orange"><%= image_tag "in_jail.jpg" %></div></div>
 
 		<!-- Bottom board tiles-->
-		<div class="bottom-tile mediteranean-avenue"><div class="title-bottom brown"></div></div>
-		<div class="bottom-tile community-chest-bottom"><%= image_tag "community-chest-bottom.jpg" %></div>
-		<div class="bottom-tile baltic-avenue"><div class="title-bottom brown"></div></div>
-		<div class="bottom-tile income-tax-bottom"><%= image_tag "income-tax.jpg" %></div>
-		<div class="bottom-tile reading-railroad"><%= image_tag "reading-railroad.jpg" %></div>
-		<div class="bottom-tile oriental-avenue"><div class="title-bottom teal"></div></div>
-		<div class="bottom-tile chance-bottom"><%= image_tag "chance-bottom.jpg" %></div>
-		<div class="bottom-tile vermont-avenue"><div class="title-bottom teal"></div></div>
-		<div class="bottom-tile connecticut-avenue"><div class="title-bottom teal"></div></div>
+		<div id="1" class="bottom-tile mediteranean-avenue"><div class="title-bottom brown"></div></div>
+		<div id="2" class="bottom-tile community-chest-bottom"><%= image_tag "community-chest-bottom.jpg" %></div>
+		<div id="3" class="bottom-tile baltic-avenue"><div class="title-bottom brown"></div></div>
+		<div id="4" class="bottom-tile income-tax-bottom"><%= image_tag "income-tax.jpg" %></div>
+		<div id="5" class="bottom-tile reading-railroad"><%= image_tag "reading-railroad.jpg" %></div>
+		<div id="6" class="bottom-tile oriental-avenue"><div class="title-bottom teal"></div></div>
+		<div id="7" class="bottom-tile chance-bottom"><%= image_tag "chance-bottom.jpg" %></div>
+		<div id="8" class="bottom-tile vermont-avenue"><div class="title-bottom teal"></div></div>
+		<div id="9" class="bottom-tile connecticut-avenue"><div class="title-bottom teal"></div></div>
 
 		<!-- Left board tiles-->
-		<div class="left-tile st-charles-place"><div class="title-left pink"></div></div>
-		<div class="left-tile electric-company"><%= image_tag "electric-company.jpg" %></div>
-		<div class="left-tile states-avenue"><div class="title-left pink"></div></div>
-		<div class="left-tile virginia-avenue"><div class="title-left pink"></div></div>
-		<div class="left-tile pennsylvania-railroad"><%= image_tag "pennsylvania-railroad.jpg" %></div>
-		<div class="left-tile st-james-place"><div class="title-left orange"></div></div>
-		<div class="left-tile community-chest-left"><%= image_tag "community-chest-left.jpg" %></div>
-		<div class="left-tile tennessee-avenue"><div class="title-left orange"></div></div>
-		<div class="left-tile new-york-avenue"><div class="title-left orange"></div></div>
+		<div id="11" class="left-tile st-charles-place"><div class="title-left pink"></div></div>
+		<div id="12" class="left-tile electric-company"><%= image_tag "electric-company.jpg" %></div>
+		<div id="13" class="left-tile states-avenue"><div class="title-left pink"></div></div>
+		<div id="14" class="left-tile virginia-avenue"><div class="title-left pink"></div></div>
+		<div id="15" class="left-tile pennsylvania-railroad"><%= image_tag "pennsylvania-railroad.jpg" %></div>
+		<div id="16" class="left-tile st-james-place"><div class="title-left orange"></div></div>
+		<div id="17" class="left-tile community-chest-left"><%= image_tag "community-chest-left.jpg" %></div>
+		<div id="18" class="left-tile tennessee-avenue"><div class="title-left orange"></div></div>
+		<div id="19" class="left-tile new-york-avenue"><div class="title-left orange"></div></div>
 
 		<!-- Top board tiles-->
-		<div class="top-tile kentucky-avenue"><div class="title-top red"></div></div>
-		<div class="top-tile chance-top"><%= image_tag "chance-top.jpg" %></div>
-		<div class="top-tile indiana-avenue"><div class="title-top red"></div></div>
-		<div class="top-tile illinois-avenue"><div class="title-top red"></div></div>
-		<div class="top-tile b-n-o-railroad"><%= image_tag "b-n-o-railroad.jpg" %></div>
-		<div class="top-tile atlantic-avenue"><div class="title-top yellow"></div></div>
-		<div class="top-tile ventnor-avenue"><div class="title-top yellow"></div></div>
-		<div class="top-tile water-works"><%= image_tag "water-works.jpg" %></div>
-		<div class="top-tile marvin-gardens"><div class="title-top yellow"></div></div>
+		<div id="21" class="top-tile kentucky-avenue"><div class="title-top red"></div></div>
+		<div id="22" class="top-tile chance-top"><%= image_tag "chance-top.jpg" %></div>
+		<div id="23" class="top-tile indiana-avenue"><div class="title-top red"></div></div>
+		<div id="24" class="top-tile illinois-avenue"><div class="title-top red"></div></div>
+		<div id="25" class="top-tile b-n-o-railroad"><%= image_tag "b-n-o-railroad.jpg" %></div>
+		<div id="26" class="top-tile atlantic-avenue"><div class="title-top yellow"></div></div>
+		<div id="27" class="top-tile ventnor-avenue"><div class="title-top yellow"></div></div>
+		<div id="28" class="top-tile water-works"><%= image_tag "water-works.jpg" %></div>
+		<div id="29" class="top-tile marvin-gardens"><div class="title-top yellow"></div></div>
 
 		<!-- Right board tiles -->
-		<div class="right-tile pacific-avenue"><div class="title-right green"></div></div>
-		<div class="right-tile north-carolina-avenue"><div class="title-right green"></div></div>
-		<div class="right-tile community-chest-right"><%= image_tag "community-chest-right.jpg" %></div>
-		<div class="right-tile pennsylvania-avenue"><div class="title-right green"></div></div>
-		<div class="right-tile short-line"><%= image_tag "short-line.jpg" %></div>
-		<div class="right-tile chance-right"><%= image_tag "chance-right.jpg" %></div>
-		<div class="right-tile park-place"><div class="title-right blue"></div></div>
-		<div class="right-tile luxury-tax"><%= image_tag "luxury-tax.jpg" %></div>
-		<div class="right-tile boardwalk"><div class="title-right blue"></div></div>
+		<div id="31" class="right-tile pacific-avenue"><div class="title-right green"></div></div>
+		<div id="32" class="right-tile north-carolina-avenue"><div class="title-right green"></div></div>
+		<div id="33" class="right-tile community-chest-right"><%= image_tag "community-chest-right.jpg" %></div>
+		<div id="34" class="right-tile pennsylvania-avenue"><div class="title-right green"></div></div>
+		<div id="35" class="right-tile short-line"><%= image_tag "short-line.jpg" %></div>
+		<div id="36" class="right-tile chance-right"><%= image_tag "chance-right.jpg" %></div>
+		<div id="37" class="right-tile park-place"><div class="title-right blue"></div></div>
+		<div id="38" class="right-tile luxury-tax"><%= image_tag "luxury-tax.jpg" %></div>
+		<div id="39" class="right-tile boardwalk"><div class="title-right blue"></div></div>
 	</div>
+</div>
+
+<div class="loadable-buttons">
+	<div id="start-button" class="green loadable-button">
+		<button class="green loadable-button" onclick="start_game()">Start</button>
+	</div>
+
+	<div id="waiting-on-host" class="grey loadable-button">
+		<button class="loadable-button">Waiting on Host</button>
+	</div>
+
+	<div id="roll-dice" class="grey loadable-button">
+		<button class="blue loadable-button" onclick="roll_dice()">Roll Dice</button>
+	</div>
+
+	<div id="waiting-for-turn" class="grey loadable-button">
+		<button class="loadable-button">Waiting for turn.</button>
+	</div>
+
+	<div id="empty"></div>
 </div>
