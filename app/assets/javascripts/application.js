@@ -17,6 +17,7 @@
 $(function() {
         var pusher = new Pusher('4eff344ae11ed3c814c8'); // Replace with your app key
         var channel = pusher.subscribe('public-chat');
+        var arr = [];
 
         // Some useful debug msgs
         pusher.connection.bind('connecting', function() {
@@ -24,6 +25,12 @@ $(function() {
         });
         pusher.connection.bind('connected', function() {
         	$('#chat-messages').html('Connected to Pusher!');
+        });
+
+        pusher.connection.bind('pusher:subscription_succeeded', function(members){
+            members.each(function(member){
+                add_member(member.id);
+            });
         });
         pusher.connection.bind('failed', function() {
         	$('#chat-messages').text('Connection to Pusher failed :(');
@@ -41,6 +48,10 @@ $(function() {
     					$("#chat-messages").animate({ scrollTop: $("#chat-messages")[0].scrollHeight }, "slow");
 								});
        });
+
+function add_member(member){
+    arr.push(member);
+}
 
 function submit() {
 	var message = document.getElementById('chat-text-input').value;
