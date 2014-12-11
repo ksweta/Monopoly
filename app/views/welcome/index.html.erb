@@ -41,10 +41,12 @@
 </div>
 
 <div class="friends-list">
-	<h2>Friends List</h2>
+	<h2>Users Online</h2>
 	<ul>
-		<li>Dave</li>
-		<li>Linda</li>
-		<li>McLovin</li>
+		<% @users.each do |userr|%>
+			<% if userr.updated_at > 1.minutes.ago %>
+				<li><%= userr.email %></li>
+			<% end %>	
+		<% end %>
 	</ul>
 </div>
