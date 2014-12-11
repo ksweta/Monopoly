@@ -85,7 +85,7 @@
 
 	$(document).ready( function(){
 		var current = "<%= current_user.email %>";
-		var host = "<%= @game.players[0].email %>";
+		var host = "<%= @game.host %>";
 		var player_turn = "<%= @game.players[@game.turn].email %>";
 		var status = "<%= @game.status %>";
 
