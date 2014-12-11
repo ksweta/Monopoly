@@ -44,7 +44,7 @@
 	<h2>Users Online</h2>
 	<ul>
 		<% @users.each do |userr|%>
-			<% if userr.updated_at > 1.minutes.ago %>
+			<% if userr.updated_at > 5.minutes.ago %>
 				<li><%= userr.email %></li>
 			<% end %>	
 		<% end %>
