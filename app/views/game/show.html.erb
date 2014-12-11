@@ -2,7 +2,7 @@
 	var pusher = new Pusher('4eff344ae11ed3c814c8');
 	var channel = pusher.subscribe('game-<%= @game.id %>');
 	var chat = pusher.subscribe('game-<%= @game.id %>-chat')
-	
+
 	pusher.connection.bind('connecting', function() {
 		$('.game-chat-messages').append('<p class="row status-message"> Connecting to game channel...</p>');
 	});
@@ -21,7 +21,7 @@
 	channel.bind('subscription_error', function(status) {
 		$('.game-chat-messages').text('Pusher subscription_error');
 	});
-	
+
 	//new player
 	channel.bind('new-player', function(data) {
 		var current = "<%= current_user.email %>";
@@ -34,11 +34,42 @@
 				$(".game-buttons").load("<%= @game.id %> #waiting-on-host");
 		}
 	});
-	
+
 	//dice rolled
 	channel.bind('dice-roll', function(data) {
 		$('.game-chat-messages').append('<p class="row status-message"> Player '+ data.current_turn +
 			' rolled a ' + data.roll +'. </p>');
+		$('.game-chat-messages').append('<p class="row status-message">It is now Player '+data.next_turn+'\'s turn.</p>');
+		$(".game-chat-messages").animate({ scrollTop: $(".game-chat-messages")[0].scrollHeight }, "slow");
+
+		//reload player data in frames
+		$(".player-1").load("<%= @game.id %> .player-1-wrapper");
+		$(".player-2").load("<%= @game.id %> .player-2-wrapper");
+		$(".player-3").load("<%= @game.id %> .player-3-wrapper");
+		$(".player-4").load("<%= @game.id %> .player-4-wrapper");
+
+
+		var current_user = "<%= current_user.email %>";
+		var next_turn_email = data.email;
+
+		//change buttons
+		if(current_user == next_turn_email) {
+			$(".game-buttons").load("<%= @game.id %> #roll-dice");
+		} else {
+			$(".game-buttons").load("<%= @game.id %> #waiting-for-turn");
+		}
+
+		//load yellow
+		var now = data.current_turn + 1;
+		var next = data.next_turn + 1;
+		$(".player-"+now).removeClass("yellow");
+		$(".player-"+next).addClass("yellow");
+	});
+
+	//purchase property and roll dice
+	channel.bind('purchase', function(data) {
+		$('.game-chat-messages').append('<p class="row status-message"> Player '+ data.current_turn +
+		' purchased this property and rolled a ' + data.roll +'. </p>');
 		$('.game-chat-messages').append('<p class="row status-message">It is now Player '+data.next_turn+'\'s turn.</p>');
 		$(".game-chat-messages").animate({ scrollTop: $(".game-chat-messages")[0].scrollHeight }, "slow");
 
@@ -76,12 +107,26 @@
 		var current = "<%= current_user.email %>";
 		var player_turn = data.player_turn;
 
-		if(current == player_turn) { 
+		if(current == player_turn) {
+			// $('.game-buttons').load("<%= @game.id %> #buy-skip-dialog");
 			$('.game-buttons').load("<%= @game.id %> #roll-dice");
 		} else {
 			$('.game-buttons').load("<%= @game.id %> #waiting-for-turn");
 		}
 	});
+
+	// chat.bind('property-prompt', function(data){
+	// 	$('.game-chat-messages').append('<p class="row status-message"> '+ data.message +'</p>');
+	// 	var current = "<%= current_user.email %>";
+	// 	var player_turn = data.player_turn;
+	//
+	// 	if(current == player_turn) {
+	// 		$('.game-buttons').load("<%= @game.id %> #buy-skip-dialog");
+	// 		// $('.game-buttons').load("<%= @game.id %> #roll-dice");
+	// 	} else {
+	// 		$('.game-buttons').load("<%= @game.id %> #waiting-for-turn");
+	// 	}
+	// });
 
 	$(document).ready( function(){
 		var current = "<%= current_user.email %>";
@@ -96,21 +141,22 @@
 				$(".game-buttons").load("<%= @game.id %> #waiting-on-host");
 			}
 		} else {
-			if(current == player_turn) { 
+			if(current == player_turn) {
+				// $('.game-buttons').load("<%= @game.id %> #buy-skip-dialog");
 				$('.game-buttons').load("<%= @game.id %> #roll-dice");
 			} else {
 				$('.game-buttons').load("<%= @game.id %> #waiting-for-turn");
 			}
 		}
-	}); 
+	});
 </script>
 
 <div class="player-wrapper">
 	<div class="player-frames">
 		<div class="player-1">
 		<div class="player-1-wrapper">
-			<p>Player 1: <%= 
-				if current_user.email == @game.players[0].email 
+			<p>Player 1: <%=
+				if current_user.email == @game.players[0].email
 					"You"
 				else
 					@game.players[0].email
@@ -123,8 +169,8 @@
 		<% if @game.players[1] then %>
 		<div class="player-2">
 				<div class="player-2-wrapper">
-			<p>Player 2: <%= 
-				if current_user.email == @game.players[1].email 
+			<p>Player 2: <%=
+				if current_user.email == @game.players[1].email
 					"You"
 				else
 					@game.players[1].email
@@ -140,8 +186,8 @@
 		<% if @game.players[2] then %>
 		<div class="player-3">
 				<div class="player-3-wrapper">
-			<p>Player 3: <%= 
-				if current_user.email == @game.players[2].email 
+			<p>Player 3: <%=
+				if current_user.email == @game.players[2].email
 					"You"
 				else
 					@game.players[2].email
@@ -155,8 +201,8 @@
 		<% if @game.players[3] then %>
 		<div class="player-4">
 		<div class="player-4-wrapper">
-			<p>Player 4: <%= 
-				if current_user.email == @game.players[0].email 
+			<p>Player 4: <%=
+				if current_user.email == @game.players[0].email
 					"You"
 				else
 					@game.players[0].email
@@ -171,7 +217,7 @@
 
 <div class="game-chat">
 	<h1 class="blue">Game <%= @game.id %> Chat:</h1>
-	
+
 	<div class="game-chat-messages">
 	</div>
 
@@ -183,7 +229,7 @@
 </div>
 
 <div class="game-buttons">
-	
+
 </div>
 
 <div class="game-board">
@@ -191,7 +237,7 @@
 	<div class="game-board-middle"><%= image_tag "board-middle.jpg" %></div>
 
 	<div class="board-tiles">
-		
+
 		<!-- Corner board tiles for the entire game-->
 		<div id="20" class="corner-tile free-parking"><%= image_tag "free_parking.jpg" %></div>
 		<div id="30" class="corner-tile go-to-jail"><%= image_tag "jail.jpg" %></div>
@@ -256,6 +302,13 @@
 		<button class="loadable-button">Waiting on Host</button>
 	</div>
 
+	<div id="buy-skip-dialog">
+		<div id="buy" class="grey loadable-button">
+			<button class="blue loadable-button-sm-left" onclick="purchase()">Purchase property.</button>
+			<button class="loadable-button-sm-right" onclick="roll_dice()">Skip roll dice.</button>
+		</div>
+	</div>
+
 	<div id="roll-dice" class="grey loadable-button">
 		<button class="blue loadable-button" onclick="roll_dice()">Roll Dice</button>
 	</div>
@@ -266,3 +319,27 @@
 
 	<div id="empty"></div>
 </div>
+
+<!-- <div class="popups">
+	<div id="buy-property" title="Would you like to buy this property?">
+		<p><span class="ui-icon ui-icon-alert" style="float:left; margin:0 7px 20px 0;"></span>Boardwalk for $4000</p>
+	</div>
+
+	<script>
+	$(function() {
+		$( "#buy-property" ).dialog({
+			resizable: false,
+			height: 140,
+			modal: true,
+			buttons: {
+				"Buy": function() {
+					$( this ).dialog( "close" );
+				},
+				Cancel: function() {
+					$( this ).dialog( "close" );
+				}
+			}
+		});
+	});
+	</script>
+</div> -->

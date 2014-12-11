@@ -1,6 +1,6 @@
 	class GameController < ApplicationController
 		before_filter :authenticate_user!
-		
+
 		def index
 			@games = Game.all
 			@users = User.all
@@ -26,7 +26,7 @@
 				@game.players.create!(user: current_user, position: 0, balance: 2000.00, email: current_user.email)
 				Pusher.trigger('game-'+params[:id].to_s, 'new-player', {:player => @game.players.length})
 			end
-			 	redirect_to :action => "show", id: params[:id] 
+			 	redirect_to :action => "show", id: params[:id]
 		end
 
 	def create
@@ -46,8 +46,8 @@
 		@game = Game.find(params[:id])
 		@game.update(status: :inprogress)
 		p @game.status
-		Pusher.trigger('game-'+params[:id].to_s+'-chat', 'game-started', 
-			{:message => "The host has started the game. Goodluck and have fun!", 
+		Pusher.trigger('game-'+params[:id].to_s+'-chat', 'game-started',
+			{:message => "The host has started the game. Goodluck and have fun!",
 				:player_turn => @game.players[@game.turn].email})
 	end
 
@@ -59,11 +59,11 @@
 		if next_turn == @game.players.length
 			next_turn = 0
 		end
-		
+
 		position = @game.players[current_turn].position
 		position += roll
-		
-		if position > 39 
+
+		if position > 39
 			position -= 39
 			balance = @game.players[current_turn].balance
 			balance += 200
@@ -74,13 +74,17 @@
 
 
 		@game.players[current_turn].update(position: position)
-		
-		Pusher.trigger('game-'+params[:id].to_s, 'dice-roll', 
-			{:current_turn => current_turn, #0-3 
-			:roll => roll, 
-			:next_turn => next_turn, #0-3
+
+		Pusher.trigger('game-'+params[:id].to_s, 'dice-roll',
+			{:current_turn => current_turn + 1, #1-4
+			:roll => roll,
+			:next_turn => next_turn + 1, #1-4
 			:email => @game.players[next_turn].email,
 			:position => position})
+	end
+
+	def purchase
+		roll_dice
 	end
 
 end

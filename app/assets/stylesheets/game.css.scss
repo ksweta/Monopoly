@@ -79,7 +79,7 @@ td {
 }
 
 .chat-submit-buttons {
-	
+
 }
 
 .game-buttons {
@@ -99,6 +99,20 @@ td {
 	left: 0;
 	height: 100%;
 	width: 100%;
+}
+
+.loadable-button-sm-left {
+	top: 0;
+	left: 0;
+	height: 100%;
+	width: 49%;
+}
+
+.loadable-button-sm-right {
+	top: 0;
+	left: 50%;
+	height: 100%;
+	width: 49%;
 }
 
 #start-button {
@@ -294,8 +308,8 @@ td {
 }
 
 .brown { background-color: #955436; }
-.teal { 
-	background-color: #aae0fa; 
+.teal {
+	background-color: #aae0fa;
 	border-bottom: 1px solid black;
 }
 .pink{ background-color: #d93a96; }
@@ -345,7 +359,7 @@ td {
 .bottom-tile {
 	position: absolute;
 	top: calc(85% + 3px);
-	height: 15%;	
+	height: 15%;
 	width: calc(7.777777777% - 3px);
 	border: 3px solid #000;
 }
